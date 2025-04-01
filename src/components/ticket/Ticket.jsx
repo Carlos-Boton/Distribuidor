@@ -1,30 +1,27 @@
-import React, { useRef, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useEffect } from "react";
 
-const Ticket = ({ tiketImpreso }) => {
+
+const Ticket = ({ tiketImpreso,setModalTiket }) => {
   const ticketRef = useRef();
-  const navigate = useNavigate();
-  const [isProcessing, setIsProcessing] = useState(false);
   const hasPrintedRef = useRef(false); // Usamos useRef para rastrear si ya se imprimió
 
   // Ejecutamos la impresión automáticamente cuando el componente se monta
   useEffect(() => {
-    if (tiketImpreso && !isProcessing && !hasPrintedRef.current) {
+    if (tiketImpreso && !hasPrintedRef.current) {
       window.print(); // Esto abrirá el diálogo de impresión
       hasPrintedRef.current = true; // Marcamos que ya se ha impreso
     }
-  }, [tiketImpreso, isProcessing]); // Solo se ejecuta cuando el ticket cambia
+  }, [tiketImpreso]); // Solo se ejecuta cuando el ticket cambia
 
   // Redirigir después de la impresión usando un setTimeout
   useEffect(() => {
     if (tiketImpreso) {
       const timer = setTimeout(() => {
-        navigate("/"); // Redirige después de que el diálogo de impresión se cierre
-      }, 1000); // Esperamos 2 segundos después de la impresión para redirigir
+      }, 100); // Esperamos 2 segundos después de la impresión para redirigir
 
       return () => clearTimeout(timer); // Limpiar el temporizador en caso de que el componente se desmonte
     }
-  }, [tiketImpreso, navigate]);
+  }, [tiketImpreso]);
 
   return (
     <div className="flex flex-col">
@@ -108,6 +105,7 @@ const Ticket = ({ tiketImpreso }) => {
       </div>
 
       {/* Botón de imprimir dentro del ticket */}
+      <button className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600" onClick={() => setModalTiket(false)}>Salir</button>
     </div>
   );
 };

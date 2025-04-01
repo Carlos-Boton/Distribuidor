@@ -47,7 +47,7 @@ const MostrarRegistros = () =>{
                   </>
                 ) : (
                   <>
-                    <Ticket tiketImpreso={tiketImpreso} />
+                    <Ticket tiketImpreso={tiketImpreso} setModalTiket={setModalTiket} />
                   </>
                 )}
             </div>
