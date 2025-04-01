@@ -1,0 +1,49 @@
+import React from "react";
+import { useState } from "react";
+import UserMenu from "./menuUsuario";
+import Sidebar from "./sidebar";
+
+const Navbar = () => {
+
+    // Estado para controlar si el sidebar está abierto o cerrado
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Función para manejar el toggle del sidebar
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  
+
+  return (
+    
+    <>  
+    <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 w-full bg-blue-600 shadow-md z-40 print:hidden">
+        <div className="container mx-auto flex items-center justify-between">
+          {/* Nombre de la app */}
+          <div className="flex items-center">
+            <button
+              onClick={toggleSidebar} // Al hacer clic aquí, se alterna el sidebar
+              className="text-white text-xl font-semibold ml-2"
+            >
+              Distribuidor Tiger
+            </button>
+          </div>
+
+          <UserMenu/>
+        </div>
+
+        {/* Franja debajo del Navbar */}
+      <div className="bg-blue-500 py-2">
+        <div className="container mx-auto text-center">
+          <h1 className="text-white text-2xl font-semibold">Título Principal</h1>
+        </div>
+      </div>
+      </nav>
+    </>
+  );
+};
+
+export default Navbar;

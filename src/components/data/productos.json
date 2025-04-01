@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "codigo": "9925366",
+        "producto": "Pepsi 2.5lt",
+        "precio": 259,
+        "categoría": "Pepsi"
+    },
+    {
+        "id": 2,
+        "codigo": "5467155",
+        "producto": "Coca 2.5lt",
+        "precio": 313,
+        "categoría": "Coca"
+    },
+    {
+        "id": 3,
+        "codigo": "5813569",
+        "producto": "Pepsi 3lt",
+        "precio": 294,
+        "categoría": "Pepsi"
+    },
+    {
+        "id": 4,
+        "codigo": "7188282",
+        "producto": "Coca 3lt",
+        "precio": 275,
+        "categoría": "Coca"
+    },
+    {
+        "id": 5,
+        "codigo": "0592316",
+        "producto": "Jumex Lata 337ml",
+        "precio": 270,
+        "categoría": "Jugos"
+    },
+    {
+        "id": 6,
+        "codigo": "7044478",
+        "producto": "Manzanita 2.5ls",
+        "precio": 259,
+        "categoría": "Sabores"
+    },
+    {
+        "id": 7,
+        "codigo": "7872214",
+        "producto": "Volt",
+        "precio": 270,
+        "categoría": "Energetizante"
+    },
+    {
+        "id": 8,
+        "codigo": "6438062",
+        "producto": "Surtido 2.5",
+        "precio": 259,
+        "categoría": "Sabores"
+    },
+    {
+        "id": 9,
+        "codigo": "4711942",
+        "producto": "Suero coco",
+        "precio": 223,
+        "categoría": "Energetizante"
+    },
+    {
+        "id": 10,
+        "codigo": "8834277",
+        "producto": "Coca 600ml 24pz",
+        "precio": 440,
+        "categoría": "Coca"
+    }
+]
