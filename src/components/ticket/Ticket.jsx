@@ -20,7 +20,7 @@ const Ticket = ({ tiketImpreso }) => {
     if (tiketImpreso) {
       const timer = setTimeout(() => {
         navigate("/"); // Redirige después de que el diálogo de impresión se cierre
-      }, 100); // Esperamos 2 segundos después de la impresión para redirigir
+      }, 1000); // Esperamos 2 segundos después de la impresión para redirigir
 
       return () => clearTimeout(timer); // Limpiar el temporizador en caso de que el componente se desmonte
     }
