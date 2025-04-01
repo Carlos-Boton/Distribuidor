@@ -105,7 +105,7 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
       </div>
 
       {/* Botón de imprimir dentro del ticket */}
-      <button className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600" onClick={() => setModalTiket(false)}>Salir</button>
+      <button className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 Print:hidden" onClick={() => setModalTiket(false)}>Salir</button>
     </div>
   );
 };
