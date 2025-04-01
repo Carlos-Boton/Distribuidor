@@ -94,7 +94,7 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
         )}
 
 
-        <p><strong>Total:</strong> ${tiketImpreso?.total?.toFixed(2) || "0.00"}</p>
+        <p className="text-2xl" ><strong>Total:</strong> ${tiketImpreso?.total || "0.00"}</p>
         <p><strong>N° de Artículos:</strong> {tiketImpreso?.productos?.reduce((acc, p) => acc + p.cantidad, 0) || 0}</p>
 
         <div className="text-center mt-4">
