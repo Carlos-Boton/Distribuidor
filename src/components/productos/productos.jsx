@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Barcode from "react-barcode";
 import TicketCodigoBarras from "./codeBarra";
+import { PrinterIcon, PencilIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
+
 
 
 const GestionProductos = () => {
@@ -125,21 +127,22 @@ const GestionProductos = () => {
                         <table className="w-full border-collapse border border-gray-300 my-4">
                             <thead>
                                 <tr className="bg-gray-200">
+                                    <th className="border border-gray-300 p-2">Acciones</th>
                                     <th className="border border-gray-300 p-2">Nombre</th>
                                     <th className="border border-gray-300 p-2">Precio</th>
-                                    <th className="border border-gray-300 p-2">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {productos.map((p, i) => (
                                     <tr key={i} className={!p.habilitado ? "bg-red-200" : ""}>
+                                        <td className="border border-gray-300 p-2">
+                                            <button onClick={() => toggleHabilitado(i)} className={`text-white p-1 mr-2 rounded-md ${
+                                            p.habilitado ? "bg-red-600 hover:bg-red-700" : "bg-green-500 hover:bg-green-600"}`}>{p.habilitado ? (<><XCircleIcon className='h-6 w-6 text-white-500' /></>) : (<><CheckCircleIcon className='h-6 w-6 text-white-500' /></>)}</button>
+                                            <button onClick={() => editarProducto(i)} className="bg-blue-500 text-white p-1 mr-2 rounded-md"><PencilIcon className="h-6 w-6 text-white-500" /></button>
+                                            <button onClick={() => [setModalCode(true), setValorCode(p.codigo)]} className="bg-yellow-700 text-white p-1 rounded-md"><PrinterIcon className="h-6 w-6 text-white-500" /></button>
+                                        </td>
                                         <td className="border border-gray-300 p-2">{p.nombre}</td>
                                         <td className="border border-gray-300 p-2">${p.precio}</td>
-                                        <td className="border border-gray-300 p-2 flex gap-2">
-                                            <button onClick={() => toggleHabilitado(i)} className="bg-red-500 text-white p-1 rounded-md">{p.habilitado ? "Incativo" : "Activo"}</button>
-                                            <button onClick={() => editarProducto(i)} className="bg-blue-500 text-white p-1 rounded-md">Editar</button>
-                                            <button onClick={() => [setModalCode(true), setValorCode(p.codigo)]} className="bg-green-700 text-white p-1 rounded-md">Imprimir</button>
-                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
