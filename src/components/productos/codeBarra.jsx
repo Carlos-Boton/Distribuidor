@@ -8,11 +8,12 @@ const TicketCodigoBarras = ({ valorCode,setModalCode }) => {
 
     return (
         <div>
-            <div className="mb-4">
+            <div className="mb-5">
                 <h2>
                 <Barcode value={valorCode} format="CODE128" />
                 </h2>
             </div>
+            <hr />
             <div className="p-4 mt-3">
                 <button onClick={handlePrint} className="bg-green-500 text-white p-2 rounded-md print:hidden">
                     Imprimir Código
