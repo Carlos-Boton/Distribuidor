@@ -1,33 +1,45 @@
 import { useState } from "react";
+import Barcode from "react-barcode";
 import TicketCodigoBarras from "./codeBarra";
 
-const generarCodigoBarras = (productos) => {
-    let codigo;
-    do {
-        codigo = Math.floor(1000000000 + Math.random() * 9000000000).toString();
-    } while (productos.some((producto) => producto.codigo === codigo));
-    return codigo;
-};
 
 const GestionProductos = () => {
     const [productos, setProductos] = useState([]);
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
+    const [codigo, setCodigo] = useState("")
     const [modalCode, setModalCode] = useState("");
     const [valorCode, setValorCode] = useState(null);
     const [modoEdicion, setModoEdicion] = useState(false);
+    const [actualizar, setActualizar] = useState(false);
+
+    const regresar = () => {
+        setCodigo("");
+        setPrecio("");
+        setNombre("");
+        setModoEdicion(false);
+    }
+
+    const generarCodigoBarras = () => {
+        let barra;
+        do {
+            barra = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+        } while (productos.some((producto) => producto.barra === barra));
+        setCodigo(barra)
+    };
 
     const agregarProducto = () => {
-        if (!nombre || !precio) return;
+        if (!nombre || !precio || !codigo) return;
         const nuevoProducto = {
         nombre,
         precio: parseFloat(precio),
-        codigo: generarCodigoBarras(productos),
+        codigo: parseFloat(codigo),
         habilitado: true,
         };
         setProductos([...productos, nuevoProducto]);
         setNombre("");
         setPrecio("");
+        setCodigo("");
         setModoEdicion(false)
     };
 
@@ -35,27 +47,27 @@ const GestionProductos = () => {
         setModoEdicion(index);
         setNombre(productos[index].nombre);
         setPrecio(productos[index].precio);
+        setCodigo(productos[index].codigo);
+        setActualizar(true);
+        setModoEdicion(true);
     };
 
     const guardarEdicion = (index) => {
         const productosActualizados = [...productos];
         productosActualizados[index].nombre = nombre;
         productosActualizados[index].precio = parseFloat(precio);
+        productosActualizados[index].codigo = parseFloat(codigo);
         setProductos(productosActualizados);
-        setModoEdicion(null);
+        setModoEdicion(false);
         setNombre("");
         setPrecio("");
+        setCodigo("");
     };
 
     const toggleHabilitado = (index) => {
         const productosActualizados = [...productos];
         productosActualizados[index].habilitado = !productosActualizados[index].habilitado;
         setProductos(productosActualizados);
-    };
-
-    const imprimirCodigo = (codigo) => {
-        const ventana = window.open("", "_blank");
-
     };
 
   return (
@@ -68,11 +80,40 @@ const GestionProductos = () => {
             <div className="p-4 pt-36">
                 {modoEdicion ? (
                     <>
-                    <div className="mb-4 print:hidden">
-                        <input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} className="border p-2 mr-2" />
-                        <input type="number" placeholder="Precio" value={precio} onChange={(e) => setPrecio(e.target.value)} className="border p-2 mr-2" />
-                        <button onClick={agregarProducto} className="bg-green-500 text-white p-2 rounded-md">Agregar</button>
-                        <button onClick={() => setModoEdicion(false)} className="bg-red-500 text-white p-2 rounded-md">Salir</button>
+                    <div className="print:hidden">
+                        <label>Nombre del producto</label>
+                        <input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} className="p-2 border border-gray-300 mb-2 rounded-md w-full" />
+                        <label>Precio</label>
+                        <input type="number" placeholder="Precio" value={precio} onChange={(e) => setPrecio(e.target.value)} className="p-2 border border-gray-300 mb-2 rounded-md w-full" />
+                        <label>Codigo</label>
+                        <div className="flex space-x-3 mb-6">
+                            <input type="number" placeholder="Codigo" value={codigo} onChange={(e) => setCodigo(e.target.value)} className="p-2 border border-gray-300 rounded-md w-full"/>
+                            <button onClick={() => generarCodigoBarras()} className="bg-blue-500 text-white p-2 rounded-md">Generar</button>
+                        </div>
+
+                        <div className="flex justify-between space-x-3 mt-4">
+                            <div>
+                                { codigo && (
+                                    <>
+                                        <h2>
+                                            <Barcode value={codigo} format="CODE128" />
+                                        </h2>
+                                    </>
+                                )}
+                            </div>
+                            <div>
+                                {actualizar ? (
+                                    <>
+                                        <button onClick={guardarEdicion} className="bg-green-500 text-white p-2 rounded-md">Actualizar</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button onClick={agregarProducto} className="bg-green-500 text-white p-2 rounded-md">Agregar</button>
+                                    </>
+                                )}
+                                <button onClick={() => regresar()} className="bg-red-500 text-white p-2 rounded-md ml-2">Salir</button>
+                            </div>
+                        </div>
                     </div>
                     </>
                 ) : (
