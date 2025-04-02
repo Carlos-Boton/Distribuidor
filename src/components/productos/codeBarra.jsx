@@ -1,34 +1,29 @@
-import JsBarcode from "jsbarcode";
-import { useEffect, useRef } from "react";
+import Barcode from "react-barcode";
 
-const TicketCodigoBarras = ({ producto }) => {
-  const barcodeRef = useRef(null);
+const TicketCodigoBarras = ({ valorCode,setModalCode }) => {
 
-  useEffect(() => {
-    if (producto?.codigo) {
-      JsBarcode(barcodeRef.current, producto.codigo, {
-        format: "CODE128",
-        displayValue: true,
-        fontSize: 16,
-      });
-    }
-  }, [producto]);
+    const handlePrint = () => {
+        window.print();
+    };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  return (
-    <div className="print-container">
-      <div className="ticket">
-        <h2>{producto.nombre}</h2>
-        <svg ref={barcodeRef}></svg>
-      </div>
-      <button onClick={handlePrint} className="print-btn">
-        Imprimir Código
-      </button>
-    </div>
-  );
+    return (
+        <div>
+            <div>
+                <h2>
+                <Barcode value={valorCode} format="CODE128" />
+                </h2>
+            </div>
+            <div className="p-4 mt-3">
+                <button onClick={handlePrint} className="bg-green-500 text-white p-2 rounded-md print:hidden">
+                    Imprimir Código
+                </button>
+                <button onClick={() => setModalCode(false)} className="bg-red-500 text-white p-2 ml-2 rounded-md print:hidden">
+                    Regresar
+                </button>
+            </div>
+        
+        </div>
+    );
 };
 
 export default TicketCodigoBarras;
