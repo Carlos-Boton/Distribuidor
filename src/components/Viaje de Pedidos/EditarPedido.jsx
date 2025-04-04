@@ -1,5 +1,6 @@
-import { useState } from "react";
-import productos from "../data/productos.json";
+import { useState,useEffect } from "react";
+import { db } from "../firebase/data";
+import { collection, addDoc, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
 import GuardarCancelar from "./guardarCancelar";
 import IngresarProductos from "./ingresarProductos";
 import ModalOtro from "./modalOtro";
@@ -9,6 +10,19 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
 
     const [modalOtro, setModalOtro] = useState(false);
     const [viaje, setViaje] = useState("0");
+    const [productos, setProductos] = useState([]);
+
+    useEffect(() => {
+        const productosRef = collection(db, "productos");
+        getDocs(productosRef)
+        .then((resp) => {
+          setProductos(
+            resp.docs.map((doc) => {
+              return { ...doc.data(), id: doc.id}
+            })
+          )
+        })
+      }, [])
 
     // Eliminar Merma
     const handleEliminarMerma = (index) => {
@@ -68,8 +82,6 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
             };
         });
     };
-
-    console.log(registroEditando)
 
     // Inicio de Vista de Editar Pedido
     return (

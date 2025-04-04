@@ -1,15 +1,15 @@
 import { useState } from "react";
-import productos from "../data/productos.json"; // Importar JSON
 
-const BuscarProducto = ({ modalAbierto, setModalAbierto, agregarProducto }) => {
+const BuscarProducto = ({ productos, modalAbierto, setModalAbierto, agregarProducto }) => {
     const [busqueda, setBusqueda] = useState("");
 
     const productosFiltrados = productos.filter(
         (p) =>
           p.producto.toLowerCase().includes(busqueda.toLowerCase()) ||
-          p.categoría.toLowerCase().includes(busqueda.toLowerCase()) ||
           p.precio.toString().includes(busqueda)
     );
+
+
 
     return(
         <>
@@ -30,10 +30,10 @@ const BuscarProducto = ({ modalAbierto, setModalAbierto, agregarProducto }) => {
               className="p-2 border border-gray-300 rounded-md w-full mb-4"
             />
             <ul className="space-y-2">
-              {productosFiltrados.map(({ codigo, producto, precio, categoría }) => (
+              {productosFiltrados.map(({ codigo, producto, precio }) => (
                 <li key={codigo} className="flex justify-between items-center p-2 border border-gray-200 rounded-md">
                   <span>
-                    {producto} - ${precio} - {categoría}
+                    {producto} - ${precio}
                   </span>
                   <button
                     onClick={() => agregarProducto({ codigo, producto, precio })}

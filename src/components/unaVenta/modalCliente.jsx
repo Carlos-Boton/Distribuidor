@@ -1,7 +1,6 @@
 import { useState } from "react";
-import clientes from "../data/clientes.json"; // Importar JSON
 
-const ModalCliente = ({ setModalClientesAbierto,modalClientesAbierto,setClienteSeleccionado }) =>{
+const ModalCliente = ({ setModalClientesAbierto,modalClientesAbierto,setClienteSeleccionado,clientes }) =>{
     const [busquedaCliente, setBusquedaCliente] = useState("");
 
     const agregarCliente = (cliente) => {

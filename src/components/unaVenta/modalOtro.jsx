@@ -4,7 +4,7 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
     const [seccionModal, setSeccionModal] = useState("producto");
     const [nuevoProducto, setNuevoProducto] = useState({ cantidad: 1, producto: "", precio: "" });
     const [nuevaMerma, setNuevaMerma] = useState({ cantidad: 1, descripcion: "" });
-    const [nuevoCliente, setNuevoCliente] = useState(null);
+    const [nuevoCliente, setNuevoCliente] = useState("");
 
     const agregarOtroCliente = () => {
         if (!nuevoCliente?.trim()) {

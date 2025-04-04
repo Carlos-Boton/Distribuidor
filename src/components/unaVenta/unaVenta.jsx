@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/data"
 import ModalOtro from "./modalOtro";
 import AgregarCodigo from "./agregarCodigo";
 import MuestraProducto from "./muestraProductos";
@@ -13,12 +15,38 @@ import Mermas from "./mermas";
 const UnaVenta = () =>{
   const [modalOtroAbierto, setModalOtroAbierto] = useState(false);
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [modalClientesAbierto, setModalClientesAbierto] = useState(false);
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const [total, setTotal] = useState(0);
   const [mermas, setMermas] = useState([]);
   const [viaje, setViaje] = useState("0");
+
+  useEffect(() => {
+    const productosRef = collection(db, "productos");
+    getDocs(productosRef)
+    .then((resp) => {
+      setProductos(
+        resp.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id}
+        })
+      )
+    })
+  }, [])
+
+  useEffect(() => {
+    const clientesRef = collection(db, "clientes");
+    getDocs(clientesRef)
+    .then((resp) => {
+      setClientes(
+        resp.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id}
+        })
+      )
+    })
+  }, [])
 
   const agregarProducto = (producto) => {
     setProductosSeleccionados((prevProductos) => {
@@ -49,15 +77,15 @@ const UnaVenta = () =>{
         <BotonCliente setModalClientesAbierto={setModalClientesAbierto} clienteSeleccionado={clienteSeleccionado}/>
             <div className="flex space-x-3 mb-4">
                 <BotonOtro setModalOtroAbierto={setModalOtroAbierto}/>
-                <AgregarCodigo agregarProducto={agregarProducto}/>
+                <AgregarCodigo productos={productos} agregarProducto={agregarProducto}/>
                 <BotonBuscar setModalAbierto={setModalAbierto}/>
             </div>
             <MuestraProducto productosSeleccionados={productosSeleccionados} total={total} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} viaje={viaje} setViaje={setViaje}  mermas={mermas} clienteSeleccionado={clienteSeleccionado}/>
             <Mermas mermas={mermas} setMermas={setMermas} />
         </div>
-        <BuscarProducto modalAbierto={modalAbierto} setModalAbierto={setModalAbierto} agregarProducto={agregarProducto}/>
+        <BuscarProducto productos={productos} modalAbierto={modalAbierto} setModalAbierto={setModalAbierto} agregarProducto={agregarProducto}/>
         <ModalOtro modalOtroAbierto={modalOtroAbierto} setModalOtroAbierto={setModalOtroAbierto} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} />
-        <ModalCliente setModalClientesAbierto={setModalClientesAbierto} modalClientesAbierto={modalClientesAbierto} setClienteSeleccionado={setClienteSeleccionado} />
+        <ModalCliente setModalClientesAbierto={setModalClientesAbierto} modalClientesAbierto={modalClientesAbierto} setClienteSeleccionado={setClienteSeleccionado} clientes={clientes} />
         </>
     )
 }

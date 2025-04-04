@@ -24,8 +24,6 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
           const registrosPrevios = JSON.parse(localStorage.getItem("registros")) || [];
           localStorage.setItem("registros", JSON.stringify([...registrosPrevios, registro]));
     
-      
-          console.log("Registro guardado:", registro);
           alert("Registro guardado con éxito.");
           setTotal(0);
           setMermas([]);

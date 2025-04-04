@@ -27,8 +27,6 @@ const ConsultarVentas = () =>{
     setFechaSeleccionada(null);
   };
 
-  console.log(registros);
-
   const filtrarPorViaje = (viaje) => {
     setViajeFiltro(viaje);
     if (viaje === "0") {

@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { db } from "../firebase/data";
+import { collection, addDoc, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
 import Barcode from "react-barcode";
 import TicketCodigoBarras from "./codeBarra";
 import { PrinterIcon, PencilIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 
 
 
-const GestionProductos = () => {
+const Productos = () => {
+    const [id,setId] = useState("");
     const [productos, setProductos] = useState([]);
+    const [productoEditando, setProductoEditando] = useState(null);
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
     const [codigo, setCodigo] = useState("")
@@ -20,46 +24,101 @@ const GestionProductos = () => {
         setPrecio("");
         setNombre("");
         setModoEdicion(false);
+        setActualizar(false);
+    }
+
+    useEffect(() => {
+        obtenerProductos();
+      }, []);
+
+      const obtenerProductos = () => {
+        const productosRef = collection(db, "productos");
+        getDocs(productosRef).then((resp) => {
+          setProductos(
+            resp.docs.map((doc) => {
+              return { ...doc.data(), id: doc.id };
+            })
+          );
+        });
+      };
+
+    const ImprimirCode = (i) => {
+        setValorCode({ ...productos[i], i });
+        setModalCode(true);
     }
 
     const generarCodigoBarras = () => {
-        let barra;
+        let dale;
         do {
-            barra = Math.floor(1000000000 + Math.random() * 9000000000).toString();
-        } while (productos.some((producto) => producto.barra === barra));
-        setCodigo(barra)
+            dale = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+        } while (productos.some((producto) => producto.dale === dale));
+        setCodigo(dale)
     };
 
-    const agregarProducto = () => {
+    const agregarProducto = async () => {
         if (!nombre || !precio || !codigo) return;
-        const nuevoProducto = {
-        nombre,
-        precio: parseFloat(precio),
-        codigo: parseFloat(codigo),
-        habilitado: true,
-        };
-        setProductos([...productos, nuevoProducto]);
-        setNombre("");
-        setPrecio("");
-        setCodigo("");
-        setModoEdicion(false)
+        
+        try {
+            const nuevoProducto = {
+                producto: nombre,
+                precio: parseFloat(precio),
+                codigo: parseFloat(codigo),
+                habilitado: true,
+            };
+            const docRef = await addDoc(collection(db, "productos"), nuevoProducto);
+            console.log("Producto agregado correctamente");
+            setProductos([...productos, nuevoProducto]);
+            setNombre("");
+            setPrecio("");
+            setCodigo("");
+            setModoEdicion(false)
+        } catch (error) {
+            console.error("Error al agregar el producto:", error);
+        }
+        
     };
 
-    const editarProducto = (index) => {
-        setModoEdicion(index);
-        setNombre(productos[index].nombre);
-        setPrecio(productos[index].precio);
-        setCodigo(productos[index].codigo);
-        setActualizar(true);
-        setModoEdicion(true);
+    const editarProducto = async (id) => {
+        try {
+            const productoRef = doc(db, "productos", id);
+            const productoSnap = await getDoc(productoRef);
+    
+            if (productoSnap.exists()) {
+                const productoData = productoSnap.data(); // Guardamos los datos en una variable
+                setProductoEditando({ id, ...productoData }); 
+    
+                // Usamos productoData en lugar de productoEditando
+                setId(id);
+                setNombre(productoData.producto);
+                setPrecio(productoData.precio);
+                setCodigo(productoData.codigo);
+                setModoEdicion(true);
+                setActualizar(true);
+            } else {
+                console.log("No se encontró el producto con ID:", id);
+            }
+        } catch (error) {
+            console.error("Error al obtener el producto:", error);
+        }
     };
 
-    const guardarEdicion = (index) => {
-        const productosActualizados = [...productos];
-        productosActualizados[index].nombre = nombre;
-        productosActualizados[index].precio = parseFloat(precio);
-        productosActualizados[index].codigo = parseFloat(codigo);
-        setProductos(productosActualizados);
+    const guardarEdicion = async () => {
+        if (!nombre || !precio || !codigo || !id) return;
+        try {
+            const productoRef = doc(db, "productos", id); // Referencia al documento por ID
+            const nuevosDatos = {
+                producto: nombre,
+                precio: parseFloat(precio),
+                codigo: parseFloat(codigo),
+                habilitado: true,
+            };
+        
+            await updateDoc(productoRef, nuevosDatos); // Actualiza los datos
+            console.log("Producto actualizado correctamente");
+            obtenerProductos();
+          } catch (error) {
+            console.error("Error al actualizar el producto:", error);
+          }
         setModoEdicion(false);
         setNombre("");
         setPrecio("");
@@ -83,6 +142,7 @@ const GestionProductos = () => {
                 {modoEdicion ? (
                     <>
                     <div className="print:hidden">
+                        <input type="hidden" placeholder="Nombre" value={id} onChange={(e) => setId(e.target.value)} className="p-2 border border-gray-300 mb-2 rounded-md w-full" />
                         <label>Nombre del producto</label>
                         <input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} className="p-2 border border-gray-300 mb-2 rounded-md w-full" />
                         <label>Precio</label>
@@ -138,10 +198,10 @@ const GestionProductos = () => {
                                         <td className="border border-gray-300 p-2">
                                             <button onClick={() => toggleHabilitado(i)} className={`text-white p-1 mr-2 rounded-md ${
                                             p.habilitado ? "bg-red-600 hover:bg-red-700" : "bg-green-500 hover:bg-green-600"}`}>{p.habilitado ? (<><XCircleIcon className='h-6 w-6 text-white-500' /></>) : (<><CheckCircleIcon className='h-6 w-6 text-white-500' /></>)}</button>
-                                            <button onClick={() => editarProducto(i)} className="bg-blue-500 text-white p-1 mr-2 rounded-md"><PencilIcon className="h-6 w-6 text-white-500" /></button>
-                                            <button onClick={() => [setModalCode(true), setValorCode(p.codigo)]} className="bg-yellow-700 text-white p-1 rounded-md"><PrinterIcon className="h-6 w-6 text-white-500" /></button>
+                                            <button onClick={() => editarProducto(p.id)} className="bg-blue-500 text-white p-1 mr-2 rounded-md"><PencilIcon className="h-6 w-6 text-white-500" /></button>
+                                            <button onClick={() => ImprimirCode(i)} className="bg-yellow-700 text-white p-1 rounded-md"><PrinterIcon className="h-6 w-6 text-white-500" /></button>
                                         </td>
-                                        <td className="border border-gray-300 p-2">{p.nombre}</td>
+                                        <td className="border border-gray-300 p-2">{p.producto}</td>
                                         <td className="border border-gray-300 p-2">${p.precio}</td>
                                     </tr>
                                 ))}
@@ -155,4 +215,4 @@ const GestionProductos = () => {
   );
 };
 
-export default GestionProductos;
+export default Productos;

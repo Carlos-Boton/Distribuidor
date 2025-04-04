@@ -65,8 +65,6 @@ const MostrarRegistros = () => {
     setModalAbierto(true);
   };
 
-  console.log(registroEditando)
-
   const guardarEdicion = () => {
     const nuevosRegistros = [...registros];
     nuevosRegistros[registroEditando.index] = { ...registroEditando };

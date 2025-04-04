@@ -22,7 +22,7 @@ const UserMenu = () => {
 
       {/* Menú desplegable */}
       {menuOpen && (
-       <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
+       <div className="absolute right-5 mt-2 w-48 bg-white shadow-lg rounded-lg p-4 flex flex-col items-center">
        {/* Imagen del usuario en el menú */}
        <img
          src="https://www.w3schools.com/w3images/avatar2.png"

@@ -1,13 +1,12 @@
 import { useState } from "react";
-import productos from "../data/productos.json"; // Importar JSON
 
-const AgregarCodigo = ({ agregarProducto }) => {
+const AgregarCodigo = ({ productos, agregarProducto }) => {
     const [codigo, setCodigo] = useState("");
     
     const handleBuscarProducto = (e) => {
         if (e.key !== "Enter") return;
 
-        const productoEncontrado = productos.find((p) => p.codigo === codigo);
+        const productoEncontrado = productos.find((p) => p.codigo === Number(codigo));
         if (!productoEncontrado) return alert("Producto no encontrado");
 
         agregarProducto(productoEncontrado);
