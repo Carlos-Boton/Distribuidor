@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 import { db } from "../firebase/data";
-import { collection, addDoc, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import GuardarCancelar from "./guardarCancelar";
 import IngresarProductos from "./ingresarProductos";
 import ModalOtro from "./modalOtro";
@@ -35,6 +35,8 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
         });
     };
     // Fin de Eliminar Merma
+
+    console.log(viaje);
 
     //   Eliminar Producto
     const handleEliminarProducto = (codigoProducto) => {
