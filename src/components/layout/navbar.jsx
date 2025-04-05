@@ -1,9 +1,26 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import UserMenu from "./menuUsuario";
 import Sidebar from "./sidebar";
 
 const Navbar = () => {
+
+    const routeTitles = {
+        "/": "Generar Pedidos",
+        "/Viaje_pedidos": "Viaje de Pedidos",
+        "/Clientes": "Clientes",
+        "/Productos": "Productos",
+        "/Consultar_ventas": "Consultar Ventas",
+        "/Prueba": "Prueba",
+    };
+
+
+
+    const location = useLocation();
+    const currentPath = location.pathname;
+    const currentTitle = routeTitles[currentPath] || "Título por defecto";
+
 
     // Estado para controlar si el sidebar está abierto o cerrado
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -38,7 +55,7 @@ const Navbar = () => {
         {/* Franja debajo del Navbar */}
       <div className="bg-blue-500 py-2">
         <div className="container mx-auto text-center">
-          <h1 className="text-white text-2xl font-semibold">Título Principal</h1>
+          <h1 className="text-white text-2xl font-semibold">{currentTitle}</h1>
         </div>
       </div>
       </nav>

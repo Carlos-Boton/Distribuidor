@@ -10,7 +10,6 @@ import { PrinterIcon, PencilIcon, CheckCircleIcon, XCircleIcon } from '@heroicon
 const Productos = () => {
     const [id,setId] = useState("");
     const [productos, setProductos] = useState([]);
-    const [productoEditando, setProductoEditando] = useState(null);
     const [nombre, setNombre] = useState("");
     const [precio, setPrecio] = useState("");
     const [codigo, setCodigo] = useState("")
@@ -18,6 +17,8 @@ const Productos = () => {
     const [valorCode, setValorCode] = useState(null);
     const [modoEdicion, setModoEdicion] = useState(false);
     const [actualizar, setActualizar] = useState(false);
+    const [alertaAgregar, setAlertaAgregar] = useState(false);
+    const [alertaActualizar, setAlertaActualizar] = useState(false);
 
     const regresar = () => {
         setCodigo("");
@@ -66,16 +67,20 @@ const Productos = () => {
                 habilitado: true,
             };
             const docRef = await addDoc(collection(db, "productos"), nuevoProducto);
-            console.log("Producto agregado correctamente");
             setProductos([...productos, nuevoProducto]);
             setNombre("");
             setPrecio("");
             setCodigo("");
-            setModoEdicion(false)
+            setModoEdicion(false);
+            setAlertaAgregar(true); // Muestra la alerta
+        
+        // Ocultar la alerta después de 3 segundos
+        setTimeout(() => {
+            setAlertaAgregar(false);
+        }, 3000);
         } catch (error) {
             console.error("Error al agregar el producto:", error);
         }
-        
     };
 
     const editarProducto = async (id) => {
@@ -85,7 +90,6 @@ const Productos = () => {
     
             if (productoSnap.exists()) {
                 const productoData = productoSnap.data(); // Guardamos los datos en una variable
-                setProductoEditando({ id, ...productoData }); 
     
                 // Usamos productoData en lugar de productoEditando
                 setId(id);
@@ -116,6 +120,10 @@ const Productos = () => {
             await updateDoc(productoRef, nuevosDatos); // Actualiza los datos
             console.log("Producto actualizado correctamente");
             obtenerProductos();
+            setAlertaActualizar(true);
+            setTimeout(() => {
+                setAlertaActualizar(false);
+            }, 3000);
           } catch (error) {
             console.error("Error al actualizar el producto:", error);
           }
@@ -207,10 +215,58 @@ const Productos = () => {
                                 ))}
                             </tbody>
                         </table>
+                        
                     </div>
+                    
                 )}
             </div>
         )}
+        {alertaAgregar && (
+            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                    <div className="flex justify-between items-center">
+                        <strong className="font-bold">¡Éxito!</strong>
+                        <button
+                            onClick={() => setAlertaAgregar(false)}
+                            className="text-gray-600 hover:text-gray-800"
+                        >
+                            <svg
+                                className="fill-current text-gray-600"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <path d="M14 6L6 14M6 6l8 8"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p className="text-sm text-gray-600">El producto fue agregado correctamente.</p>
+                </div>
+            </div>
+        )}
+        {alertaActualizar && (
+            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                    <div className="flex justify-between items-center">
+                        <strong className="font-bold">¡Éxito!</strong>
+                        <button
+                            onClick={() => setAlertaActualizar(false)}
+                            className="text-gray-600 hover:text-gray-800"
+                        >
+                            X
+                        </button>
+                    </div>
+                    <p className="text-sm text-gray-600">El producto fue Actualizado correctamente.</p>
+                </div>
+            </div>
+        )}
+
     </div>
   );
 };

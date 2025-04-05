@@ -1,14 +1,19 @@
+import { useState } from "react";
 
 
 const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,setProductosSeleccionados,setTotal,setMermas,viaje,setViaje,clienteSeleccionado,mermas}) => {
 
+    const [agregaCliente, setAgregaCliente] = useState(false);
+    const [agregaProducto, setAgregaProducto] = useState(false);
+    const [guardadoExito, setGuardadoExito] = useState(false);
+
     const handleGuardarRegistro = () => {
         if (!clienteSeleccionado) {
-          alert("Debe agregar un cliente antes de guardar.");
+          setAgregaCliente(true)
           return;
         }
         if (productosSeleccionados.length === 0) {
-          alert("Debe agregar al menos un producto antes de guardar.");
+          setAgregaProducto(true);
           return;
         }
     
@@ -19,12 +24,12 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
             total: total,
             viaje: viaje,
             fecha: new Date().toLocaleDateString("en-GB")
-          };
+        };
     
           const registrosPrevios = JSON.parse(localStorage.getItem("registros")) || [];
           localStorage.setItem("registros", JSON.stringify([...registrosPrevios, registro]));
     
-          alert("Registro guardado con éxito.");
+          setGuardadoExito(true);
           setTotal(0);
           setMermas([]);
           setProductosSeleccionados([]);
@@ -103,6 +108,94 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
                     className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600" >Cancelar</button>
                 </div>
             </div>
+
+            {agregaCliente && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                        <div className="flex justify-between items-center">
+                            <strong className="font-bold">Advertencia</strong>
+                            <button
+                                onClick={() => setAgregaCliente(false)}
+                                className="text-gray-600 hover:text-gray-800"
+                            >
+                                <svg
+                                    className="fill-current text-gray-600"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 20 20"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M14 6L6 14M6 6l8 8"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p className="text-xl">Agrega Cliente</p>
+                    </div>
+                </div>
+            )}
+            {agregaProducto && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                        <div className="flex justify-between items-center">
+                            <strong className="font-bold">Advertencia</strong>
+                            <button
+                                onClick={() => setAgregaProducto(false)}
+                                className="text-gray-600 hover:text-gray-800"
+                            >
+                                <svg
+                                    className="fill-current text-gray-600"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 20 20"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M14 6L6 14M6 6l8 8"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p className="text-xl">Agrega al menos un producto</p>
+                    </div>
+                </div>
+            )}
+            {guardadoExito && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                        <div className="flex justify-between items-center">
+                            <strong className="font-bold">Exito</strong>
+                            <button
+                                onClick={() => setGuardadoExito(false)}
+                                className="text-gray-600 hover:text-gray-800"
+                            >
+                                <svg
+                                    className="fill-current text-gray-600"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 20 20"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M14 6L6 14M6 6l8 8"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p className="text-xl">Pedido Agregado</p>
+                    </div>
+                </div>
+            )}
         </>
     )
 }
