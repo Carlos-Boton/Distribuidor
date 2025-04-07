@@ -42,19 +42,17 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
         <table className="w-full text-sm">
           <thead>
             <tr>
-              <th className="text-left">Cant.</th>
+              <th className="text-left">##</th>
               <th className="text-left">Producto</th>
-              <th className="text-right">Precio</th>
-              <th className="text-right">Total</th>
+              <th className="text-right">subTotal</th>
             </tr>
           </thead>
           <tbody>
             {tiketImpreso?.productos?.map((p, index) => (
               <tr key={index}>
-                <td>{p.cantidad}</td>
-                <td>{p.producto}</td>
-                <td className="text-right">${p.precio.toFixed(2)}</td>
-                <td className="text-right">${(p.cantidad * p.precio).toFixed(2)}</td>
+                <td className="text-xl">{p.cantidad}</td>
+                <td className="text-xl">{p.producto}</td>
+                <td className="text-xl text-right">${(p.cantidad * p.precio)}</td>
               </tr>
             )) || (
               <tr>

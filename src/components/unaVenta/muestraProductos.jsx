@@ -1,40 +1,73 @@
 import { useState } from "react";
 
 
-const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,setProductosSeleccionados,setTotal,setMermas,viaje,setViaje,clienteSeleccionado,mermas}) => {
+const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,setProductosSeleccionados,setTotal,setMermas,viaje,setViaje,clienteSeleccionado,mermas,setTiketImpreso,setModalTiket}) => {
 
     const [agregaCliente, setAgregaCliente] = useState(false);
     const [agregaProducto, setAgregaProducto] = useState(false);
     const [guardadoExito, setGuardadoExito] = useState(false);
 
+    const generarCodigoUnico = (registros) => {
+        let intentos = 0;
+        const maxIntentos = 10;
+      
+        while (intentos < maxIntentos) {
+          const nuevoCodigo = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+          const existe = registros.some((r) => r.id === nuevoCodigo);
+      
+          if (!existe) return nuevoCodigo;
+      
+          intentos++;
+        }
+      
+        return null; // no se pudo generar un código único
+      };
+      
+
     const handleGuardarRegistro = () => {
         if (!clienteSeleccionado) {
-          setAgregaCliente(true)
+          setAgregaCliente(true);
           return;
         }
+      
         if (productosSeleccionados.length === 0) {
           setAgregaProducto(true);
           return;
         }
-    
+      
+        const registrosPrevios = JSON.parse(localStorage.getItem("registros")) || [];
+      
+        const codigoGenerado = generarCodigoUnico(registrosPrevios);
+
+        if (!codigoGenerado) {
+            alert("No se pudo generar un ID único");
+            return;
+        }
+
         const registro = {
-            cliente: clienteSeleccionado,
-            productos: productosSeleccionados,
-            mermas: mermas.length > 0 ? mermas : ([]),
-            total: total,
-            viaje: viaje,
-            fecha: new Date().toLocaleDateString("en-GB")
+          id: codigoGenerado,
+          cliente: clienteSeleccionado,
+          productos: productosSeleccionados,
+          mermas: mermas.length > 0 ? mermas : [],
+          total: total,
+          viaje: viaje,
+          fecha: new Date().toLocaleDateString("en-GB")
         };
-    
-          const registrosPrevios = JSON.parse(localStorage.getItem("registros")) || [];
-          localStorage.setItem("registros", JSON.stringify([...registrosPrevios, registro]));
-    
-          setGuardadoExito(true);
-          setTotal(0);
-          setMermas([]);
-          setProductosSeleccionados([]);
-          setClienteSeleccionado(null);
-    }
+      
+        if (viaje === "0") {
+          setTiketImpreso(registro);
+          setModalTiket(true);
+        }
+      
+        localStorage.setItem("registros", JSON.stringify([...registrosPrevios, registro]));
+      
+        setGuardadoExito(true);
+        setTotal(0);
+        setMermas([]);
+        setProductosSeleccionados([]);
+        setClienteSeleccionado(null);
+      };
+      
 
     const handleEliminarProducto = (codigoProducto) => {
         setProductosSeleccionados((prevProductos) => {

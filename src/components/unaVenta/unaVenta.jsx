@@ -10,19 +10,22 @@ import BotonOtro from "./botonOtro";
 import BotonCliente from "./botonCliente";
 import ModalCliente from "./modalCliente";
 import Mermas from "./mermas";
+import Ticket from "../ticket/Ticket";
 
 
 const UnaVenta = () =>{
-  const [modalOtroAbierto, setModalOtroAbierto] = useState(false);
-  const [productosSeleccionados, setProductosSeleccionados] = useState([]);
-  const [productos, setProductos] = useState([]);
-  const [clientes, setClientes] = useState([]);
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const [modalClientesAbierto, setModalClientesAbierto] = useState(false);
-  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
-  const [total, setTotal] = useState(0);
-  const [mermas, setMermas] = useState([]);
-  const [viaje, setViaje] = useState("0");
+    const [viaje, setViaje] = useState("0");
+    const [total, setTotal] = useState(0);
+    const [tiketImpreso, setTiketImpreso] = useState();
+    const [productosSeleccionados, setProductosSeleccionados] = useState([]);
+    const [productos, setProductos] = useState([]);
+    const [clientes, setClientes] = useState([]);
+    const [mermas, setMermas] = useState([]);
+    const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+    const [modalOtroAbierto, setModalOtroAbierto] = useState(false);
+    const [modalAbierto, setModalAbierto] = useState(false);
+    const [modalTiket, setModalTiket] = useState(false);
+    const [modalClientesAbierto, setModalClientesAbierto] = useState(false);
 
   useEffect(() => {
     const productosRef = collection(db, "productos");
@@ -73,16 +76,24 @@ const UnaVenta = () =>{
 
     return (
         <>
-        <div className="pt-36 p-4">
-        <BotonCliente setModalClientesAbierto={setModalClientesAbierto} clienteSeleccionado={clienteSeleccionado}/>
-            <div className="flex space-x-3 mb-4">
-                <BotonOtro setModalOtroAbierto={setModalOtroAbierto}/>
-                <AgregarCodigo productos={productos} agregarProducto={agregarProducto}/>
-                <BotonBuscar setModalAbierto={setModalAbierto}/>
-            </div>
-            <MuestraProducto productosSeleccionados={productosSeleccionados} total={total} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} viaje={viaje} setViaje={setViaje}  mermas={mermas} clienteSeleccionado={clienteSeleccionado}/>
-            <Mermas mermas={mermas} setMermas={setMermas} />
-        </div>
+        
+            {modalTiket ? (
+                <>
+                <Ticket tiketImpreso={tiketImpreso} setModalTiket={setModalTiket} />
+                </>   
+            ) : (
+                <div className="pt-36 p-4">
+                    <BotonCliente setModalClientesAbierto={setModalClientesAbierto} clienteSeleccionado={clienteSeleccionado}/>
+                    <div className="flex space-x-3 mb-4">
+                        <BotonOtro setModalOtroAbierto={setModalOtroAbierto}/>
+                        <AgregarCodigo productos={productos} agregarProducto={agregarProducto}/>
+                        <BotonBuscar setModalAbierto={setModalAbierto}/>
+                    </div>
+                    <MuestraProducto productosSeleccionados={productosSeleccionados} total={total} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} viaje={viaje} setViaje={setViaje}  mermas={mermas} clienteSeleccionado={clienteSeleccionado} setTiketImpreso={setTiketImpreso} setModalTiket={setModalTiket} />
+                    <Mermas mermas={mermas} setMermas={setMermas}/>
+                </div>
+            )}
+        
         <BuscarProducto productos={productos} modalAbierto={modalAbierto} setModalAbierto={setModalAbierto} agregarProducto={agregarProducto}/>
         <ModalOtro modalOtroAbierto={modalOtroAbierto} setModalOtroAbierto={setModalOtroAbierto} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} />
         <ModalCliente setModalClientesAbierto={setModalClientesAbierto} modalClientesAbierto={modalClientesAbierto} setClienteSeleccionado={setClienteSeleccionado} clientes={clientes} />

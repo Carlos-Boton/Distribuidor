@@ -9,9 +9,9 @@ import ModalOtro from "./modalOtro";
 const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,registros,setRegistros}) => {
 
     const [modalOtro, setModalOtro] = useState(false);
-    const [viaje, setViaje] = useState("0");
+    const [viaje, setViaje] = useState(registroEditando.viaje);
     const [productos, setProductos] = useState([]);
-
+    registroEditando.viaje = viaje;
     useEffect(() => {
         const productosRef = collection(db, "productos");
         getDocs(productosRef)
@@ -35,8 +35,6 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
         });
     };
     // Fin de Eliminar Merma
-
-    console.log(viaje);
 
     //   Eliminar Producto
     const handleEliminarProducto = (codigoProducto) => {
@@ -97,7 +95,7 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
             </div>
             <div className="flex justify-between space-x-3 mb-3">
                 <h3 className="text-lg font-semibold mt-4">Total: ${registroEditando.total}</h3>
-                <select value={registroEditando.viaje} onChange={(e) => setViaje(e.target.value)} className="rounded-md border border-gray-400 p-2 mr-2">
+                <select value={viaje} onChange={(e) => setViaje(e.target.value)} className="rounded-md border border-gray-400 p-2 mr-2">
                     <option value="0">Venta</option>
                     <option value="1">Viaje 1</option>
                     <option value="2">Viaje 2</option>

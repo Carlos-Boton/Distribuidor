@@ -28,9 +28,12 @@ const MostrarRegistros = () =>{
   ? registros.filter((registro) => registro.fecha === fechaHoy)
   : registros.filter((registro) => registro.fecha === fechaHoy && registro.viaje === filtroViaje);
 
-  const abrirModalEdicion = (index) => {
-    setRegistroEditando({ ...registros[index], index });
-    setModalAbierto(true);
+  const abrirModalEdicion = (id) => {
+    const registro = registros.find((r) => r.id === id);
+    if (registro) {
+      setRegistroEditando({ ...registro});
+      setModalAbierto(true);
+    }
   };
 
   return(

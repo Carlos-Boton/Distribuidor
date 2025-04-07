@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/data";
-import { collection, addDoc, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, query, where, doc, updateDoc } from "firebase/firestore";
 import Barcode from "react-barcode";
 import TicketCodigoBarras from "./codeBarra";
 import { PrinterIcon, PencilIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
@@ -14,7 +14,11 @@ const Productos = () => {
     const [precio, setPrecio] = useState("");
     const [codigo, setCodigo] = useState("")
     const [modalCode, setModalCode] = useState("");
+    const [busqueda, setBusqueda] = useState("");
     const [valorCode, setValorCode] = useState(null);
+    const [agregarContenido, setAgregarContenido] = useState(false);
+    const [existeNombre, setExisteNombre] = useState(false);
+    const [existeCodigo, setExisteCodigo] = useState(false);
     const [modoEdicion, setModoEdicion] = useState(false);
     const [actualizar, setActualizar] = useState(false);
     const [alertaAgregar, setAlertaAgregar] = useState(false);
@@ -49,24 +53,53 @@ const Productos = () => {
     }
 
     const generarCodigoBarras = () => {
-        let dale;
-        do {
-            dale = Math.floor(1000000000 + Math.random() * 9000000000).toString();
-        } while (productos.some((producto) => producto.dale === dale));
-        setCodigo(dale)
+        let intentos = 0;
+        const maxIntentos = 10;
+      
+        while (intentos < maxIntentos) {
+          const nuevoCodigo = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+          const existe = productos.some((r) => r.id === nuevoCodigo);
+      
+          if (!existe) return setCodigo(nuevoCodigo);
+      
+          intentos++;
+        }
     };
 
     const agregarProducto = async () => {
-        if (!nombre || !precio || !codigo) return;
+        if (!nombre || !precio || !codigo){
+            setAgregarContenido(true);
+            return;
+        }
         
         try {
+            const productosRef = collection(db, "productos");
+
+            // Verificar si ya existe por nombre
+            const nombreQuery = query(productosRef, where("producto", "==", nombre.trim().toLowerCase()));
+            const nombreSnapshot = await getDocs(nombreQuery);
+
+            if (!nombreSnapshot.empty) {
+                setExisteNombre(true);
+                return;
+            }
+
+            // Verificar si ya existe por código
+            const codigoQuery = query(productosRef, where("codigo", "==", parseFloat(codigo)));
+            const codigoSnapshot = await getDocs(codigoQuery);
+
+            if (!codigoSnapshot.empty) {
+                setExisteCodigo(true);
+                return;
+            }
+
             const nuevoProducto = {
                 producto: nombre,
                 precio: parseFloat(precio),
                 codigo: parseFloat(codigo),
                 habilitado: true,
             };
-            const docRef = await addDoc(collection(db, "productos"), nuevoProducto);
+            await addDoc(collection(db, "productos"), nuevoProducto);
             setProductos([...productos, nuevoProducto]);
             setNombre("");
             setPrecio("");
@@ -131,6 +164,7 @@ const Productos = () => {
         setNombre("");
         setPrecio("");
         setCodigo("");
+        setActualizar(false);
     };
 
     const toggleHabilitado = (index) => {
@@ -138,6 +172,12 @@ const Productos = () => {
         productosActualizados[index].habilitado = !productosActualizados[index].habilitado;
         setProductos(productosActualizados);
     };
+
+    const productitos = productos.filter(
+        (p) =>
+          p.producto.toLowerCase().includes(busqueda.toLowerCase()) ||
+          p.precio.toString().includes(busqueda)
+    );
 
   return (
     <div>
@@ -188,9 +228,18 @@ const Productos = () => {
                     </>
                 ) : (
                     <div>
-                        <button onClick={() => setModoEdicion(true)} className="bg-blue-500 text-white p-2 rounded-md mb-4">
-                            Nuevo
-                        </button>
+                        <div className="flex justify-between space-x-3 mb-4">
+                            <button onClick={() => setModoEdicion(true)} className="bg-blue-500 text-white p-2 rounded-md mb-4">
+                                Nuevo
+                            </button>
+                            <input
+                            type="text"
+                            value={busqueda}
+                            onChange={(e) => setBusqueda(e.target.value)}
+                            placeholder="Buscar producto"
+                            className="p-2 border border-gray-300 rounded-md w-full mb-4"
+                            />
+                        </div>
                         <h3 className="mt-4 font-bold">Lista de Productos</h3>
                         <table className="w-full border-collapse border border-gray-300 my-4">
                             <thead>
@@ -201,7 +250,7 @@ const Productos = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {productos.map((p, i) => (
+                                {productitos.map((p, i) => (
                                     <tr key={i} className={!p.habilitado ? "bg-red-200" : ""}>
                                         <td className="border border-gray-300 p-2">
                                             <button onClick={() => toggleHabilitado(i)} className={`text-white p-1 mr-2 rounded-md ${
@@ -221,50 +270,75 @@ const Productos = () => {
                 )}
             </div>
         )}
-        {alertaAgregar && (
-            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                    <div className="flex justify-between items-center">
-                        <strong className="font-bold">¡Éxito!</strong>
-                        <button
-                            onClick={() => setAlertaAgregar(false)}
-                            className="text-gray-600 hover:text-gray-800"
-                        >
-                            <svg
-                                className="fill-current text-gray-600"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 20 20"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M14 6L6 14M6 6l8 8"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <p className="text-sm text-gray-600">El producto fue agregado correctamente.</p>
-                </div>
+        {existeNombre && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+              <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Error!</h2>
+              <p className="text-gray-600 mb-6">El producto ya existe</p>
+              <button
+                onClick={() => setExisteNombre(false)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+              >
+                Entendido
+              </button>
             </div>
+          </div>
+        )}
+        {existeCodigo && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+              <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Error!</h2>
+              <p className="text-gray-600 mb-6">El Codigo del producto ya existe</p>
+              <button
+                onClick={() => setExisteCodigo(false)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        )}
+        {agregarContenido && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+              <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Alerta!</h2>
+              <p className="text-gray-700 mb-6">Rellana los valores del producto</p>
+              <button
+                onClick={() => setAgregarContenido(false)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        )}
+        {alertaAgregar && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+              <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Agregado!</h2>
+              <p className="text-gray-700 mb-6">El producto ha sido Agregado</p>
+              <button
+                onClick={() => setAlertaAgregar(false)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
         )}
         {alertaActualizar && (
-            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                    <div className="flex justify-between items-center">
-                        <strong className="font-bold">¡Éxito!</strong>
-                        <button
-                            onClick={() => setAlertaActualizar(false)}
-                            className="text-gray-600 hover:text-gray-800"
-                        >
-                            X
-                        </button>
-                    </div>
-                    <p className="text-sm text-gray-600">El producto fue Actualizado correctamente.</p>
-                </div>
+            <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+              <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Actualizado!</h2>
+              <p className="text-gray-700 mb-6">El producto a sido Actualizado</p>
+              <button
+                onClick={() => setAlertaActualizar(false)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+              >
+                Entendido
+              </button>
             </div>
+          </div>
         )}
 
     </div>
