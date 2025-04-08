@@ -85,9 +85,6 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
                                 <li className="py-1">
                                     <Link to="/Consultar_ventas" className="block ml-2">CONSULTAR VENTAS</Link>
                                 </li>
-                                <li className="py-1">
-                                    <a href="/Prueba" className="block ml-2">---</a>
-                                </li>
                             </ul>
                         )}
                     </li>

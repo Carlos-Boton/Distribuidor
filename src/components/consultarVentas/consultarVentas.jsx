@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { db } from "../firebase/data";
+import { collection, getDocs } from "firebase/firestore";
+
 
 const ConsultarVentas = () =>{
     const [registros, setRegistros] = useState([]);
@@ -9,12 +12,30 @@ const ConsultarVentas = () =>{
   const [modalPedido, setModalPedido] = useState(null);
   const [vistaPedidos, setVistaPedidos] = useState(false);
 
-  useEffect(() => {
-    const registrosGuardados = JSON.parse(localStorage.getItem("registros")) || [];
-    setRegistros(registrosGuardados);
-    const fechas = [...new Set(registrosGuardados.map((r) => r.fecha))];
-    setFechasUnicas(fechas);
-  }, []);
+    useEffect(() => {
+        obtenerRegistro();
+    }, []);
+
+    const obtenerRegistro = async () => {
+        try {
+          const registroRef = collection(db, "registros");
+          const resp = await getDocs(registroRef);
+      
+          const registrosObtenidos = resp.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+      
+          setRegistros(registrosObtenidos);
+      
+          // Extraer fechas únicas desde los datos
+          const fechas = [...new Set(registrosObtenidos.map((r) => r.fecha))];
+          setFechasUnicas(fechas);
+      
+        } catch (error) {
+          console.error("Error al obtener registros:", error);
+        }
+      };
 
   const seleccionarFecha = (fecha) => {
     setFechaSeleccionada(fecha);

@@ -1,15 +1,17 @@
 
 
-const GuardarCancelar = ({setModalAbierto,setRegistros,registros,registroEditando}) => {
+const GuardarCancelar = ({setModalAbierto,setRegistros,registros,registroEditando,setPedidoActualizado}) => {
 
         // Guardar El Pedido Editado
         const guardarEdicion = () => {
-            const nuevosRegistros = [...registros];
-            nuevosRegistros[registroEditando.index] = { ...registroEditando };
+            const nuevosRegistros = registros.map((r) =>
+              r.id === registroEditando.id ? { ...registroEditando } : r
+            );
+          
             setRegistros(nuevosRegistros);
             localStorage.setItem("registros", JSON.stringify(nuevosRegistros));
             setModalAbierto(false);
-            alert("Registro actualizado.");
+            setPedidoActualizado(true);
           };
         //   Fin de Guardar El Pedido Editado
     return(

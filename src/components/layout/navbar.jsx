@@ -12,7 +12,6 @@ const Navbar = () => {
         "/Clientes": "Clientes",
         "/Productos": "Productos",
         "/Consultar_ventas": "Consultar Ventas",
-        "/Prueba": "Prueba",
     };
 
 

@@ -12,6 +12,7 @@ const MostrarRegistros = () =>{
   const [filtroViaje, setFiltroViaje] = useState("0"); // Estado del filtro
   const [registroEditando, setRegistroEditando] = useState(null);
   const [modalTiket, setModalTiket] = useState(false);
+  const [pedidoActualizado, setPedidoActualizado] = useState(false);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [tiketImpreso, setTiketImpreso] = useState()
   const [resumen, setResumen] = useState({ totalPedidos: 0, totalProductos: 0, productosAgrupados: {} });
@@ -46,7 +47,7 @@ const MostrarRegistros = () =>{
                 <ModalResumen modalResumenAbierto={modalResumenAbierto} setModalResumenAbierto={setModalResumenAbierto} productosSeleccionados={productosSeleccionados} setProductosSeleccionados={setProductosSeleccionados} setFiltroViaje={setFiltroViaje} resumen={resumen} setResumen={setResumen} registrosFiltrados={registrosFiltrados} />
                 <FiltrarViaje setFiltroViaje={setFiltroViaje} filtroViaje={filtroViaje} />
               </div>
-                    <RegistroPedidos registrosFiltrados={registrosFiltrados} setRegistros={setRegistros} registros={registros} abrirModalEdicion={abrirModalEdicion} setModalTiket={setModalTiket} setTiketImpreso={setTiketImpreso} />
+                    <RegistroPedidos registrosFiltrados={registrosFiltrados} setRegistros={setRegistros} registros={registros} abrirModalEdicion={abrirModalEdicion} setModalTiket={setModalTiket} setTiketImpreso={setTiketImpreso} pedidoActualizado={pedidoActualizado}  setPedidoActualizado={setPedidoActualizado} />
                   </>
                 ) : (
                   <>
@@ -56,7 +57,7 @@ const MostrarRegistros = () =>{
             </div>
         ) : (
             <div>
-              <EditarPedido registroEditando={registroEditando} setModalAbierto={setModalAbierto} setRegistroEditando={setRegistroEditando} setRegistros={setRegistros} registros={registros} />
+              <EditarPedido registroEditando={registroEditando} setModalAbierto={setModalAbierto} setRegistroEditando={setRegistroEditando} setRegistros={setRegistros} registros={registros} setPedidoActualizado={setPedidoActualizado} />
             </div>
         )}
     </div>

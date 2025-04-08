@@ -6,7 +6,7 @@ import IngresarProductos from "./ingresarProductos";
 import ModalOtro from "./modalOtro";
 
 
-const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,registros,setRegistros}) => {
+const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,registros,setRegistros,setPedidoActualizado}) => {
 
     const [modalOtro, setModalOtro] = useState(false);
     const [viaje, setViaje] = useState(registroEditando.viaje);
@@ -87,7 +87,6 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
     return (
         <>
             <div className="flex flex-col items-center justify-center pt-36">
-                <h2 className="text-lg font-bold mb-4">Editar Registro</h2>
             </div>
             <p className="text-xl mb-2"><strong>Cliente:</strong> {registroEditando.cliente}</p>
             <div className="flex space-x-3 mb-4">
@@ -162,7 +161,7 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
             )}
             {/* Fin de Editar Mermas */}
 
-            <GuardarCancelar setModalAbierto={setModalAbierto} registroEditando={registroEditando} setRegistros={setRegistros} registros={registros} />
+            <GuardarCancelar setModalAbierto={setModalAbierto} registroEditando={registroEditando} setRegistros={setRegistros} registros={registros} setPedidoActualizado={setPedidoActualizado} />
 
             <ModalOtro modalOtro={modalOtro} setModalOtro={setModalOtro} setRegistroEditando={setRegistroEditando} />
         </>
