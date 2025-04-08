@@ -27,11 +27,17 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
     const handleGuardarRegistro = () => {
         if (!clienteSeleccionado) {
           setAgregaCliente(true);
+          setTimeout(() => {
+            setAgregaCliente(false);
+        }, 3000);
           return;
         }
       
         if (productosSeleccionados.length === 0) {
           setAgregaProducto(true);
+          setTimeout(() => {
+            setAgregaProducto(false);
+        }, 3000);
           return;
         }
       
@@ -61,11 +67,14 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
       
         localStorage.setItem("registros", JSON.stringify([...registrosPrevios, registro]));
       
-        setGuardadoExito(true);
         setTotal(0);
         setMermas([]);
         setProductosSeleccionados([]);
         setClienteSeleccionado(null);
+        setGuardadoExito(true);
+        setTimeout(() => {
+            setGuardadoExito(false);
+        }, 3000);
       };
       
 
@@ -143,91 +152,46 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
             </div>
 
             {agregaCliente && (
-                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                        <div className="flex justify-between items-center">
-                            <strong className="font-bold">Advertencia</strong>
-                            <button
-                                onClick={() => setAgregaCliente(false)}
-                                className="text-gray-600 hover:text-gray-800"
-                            >
-                                <svg
-                                    className="fill-current text-gray-600"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 20 20"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <path d="M14 6L6 14M6 6l8 8"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <p className="text-xl">Agrega Cliente</p>
-                    </div>
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                  <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Advertencia!</h2>
+                  <p className="text-gray-600 mb-6">El Ingrese el cliente</p>
+                  <button
+                    onClick={() => setAgregaCliente(false)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                  >
+                    Entendido
+                  </button>
                 </div>
+              </div>
             )}
             {agregaProducto && (
-                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                        <div className="flex justify-between items-center">
-                            <strong className="font-bold">Advertencia</strong>
-                            <button
-                                onClick={() => setAgregaProducto(false)}
-                                className="text-gray-600 hover:text-gray-800"
-                            >
-                                <svg
-                                    className="fill-current text-gray-600"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 20 20"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <path d="M14 6L6 14M6 6l8 8"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <p className="text-xl">Agrega al menos un producto</p>
-                    </div>
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                  <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Advertencia!</h2>
+                  <p className="text-gray-600 mb-6">Agrega un producto para guardar datos</p>
+                  <button
+                    onClick={() => agregaProducto(false)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                  >
+                    Entendido
+                  </button>
                 </div>
+              </div>
             )}
             {guardadoExito && (
-                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                        <div className="flex justify-between items-center">
-                            <strong className="font-bold">Exito</strong>
-                            <button
-                                onClick={() => setGuardadoExito(false)}
-                                className="text-gray-600 hover:text-gray-800"
-                            >
-                                <svg
-                                    className="fill-current text-gray-600"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 20 20"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
-                                    <path d="M14 6L6 14M6 6l8 8"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <p className="text-xl">Pedido Agregado</p>
-                    </div>
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                  <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Agregado!</h2>
+                  <p className="text-gray-600 mb-6">El pedido se ha guardado en el Viaje {viaje} </p>
+                  <button
+                    onClick={() => setGuardadoExito(false)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                  >
+                    Entendido
+                  </button>
                 </div>
+              </div>
             )}
         </>
     )

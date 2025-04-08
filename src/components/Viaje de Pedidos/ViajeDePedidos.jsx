@@ -5,7 +5,7 @@ import EditarPedido from "./EditarPedido";
 import FiltrarViaje from "./filtrarViaje";
 import Ticket from "../ticket/Ticket";
 
-const MostrarRegistros = () =>{
+const MostrarRegistros = () => {
   const [registros, setRegistros] = useState([]);
   const [modalResumenAbierto, setModalResumenAbierto] = useState(false);
   const [productosSeleccionados, setProductosSeleccionados] = useState({});

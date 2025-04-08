@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import GuardarCancelar from "./guardarCancelar";
 import IngresarProductos from "./ingresarProductos";
 import ModalOtro from "./modalOtro";
+import BuscarProducto from "./buscarProducto";
 
 
 const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,registros,setRegistros,setPedidoActualizado}) => {
@@ -11,6 +12,7 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
     const [modalOtro, setModalOtro] = useState(false);
     const [viaje, setViaje] = useState(registroEditando.viaje);
     const [productos, setProductos] = useState([]);
+    const [modalProducto, setModalProducto] = useState(false);
     registroEditando.viaje = viaje;
     useEffect(() => {
         const productosRef = collection(db, "productos");
@@ -70,9 +72,11 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
                         : p
                 );
                 nuevoTotal = prevRegistro.total + nuevoProducto.precio;
+                setModalProducto(false);
             } else {
                 productosActualizados = [...prevRegistro.productos, { ...nuevoProducto, cantidad: 1, subtotal: nuevoProducto.precio }];
                 nuevoTotal = prevRegistro.total + nuevoProducto.precio;
+                setModalProducto(false);
             }
 
             return {
@@ -80,6 +84,7 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
                 productos: productosActualizados,
                 total: nuevoTotal
             };
+
         });
     };
 
@@ -90,7 +95,7 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
             </div>
             <p className="text-xl mb-2"><strong>Cliente:</strong> {registroEditando.cliente}</p>
             <div className="flex space-x-3 mb-4">
-                <IngresarProductos handleAgregarProducto={handleAgregarProducto} setModalOtro={setModalOtro} productos={productos} />
+                <IngresarProductos handleAgregarProducto={handleAgregarProducto} setModalOtro={setModalOtro} productos={productos} setModalProducto={setModalProducto} />
             </div>
             <div className="flex justify-between space-x-3 mb-3">
                 <h3 className="text-lg font-semibold mt-4">Total: ${registroEditando.total}</h3>
@@ -162,6 +167,8 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
             {/* Fin de Editar Mermas */}
 
             <GuardarCancelar setModalAbierto={setModalAbierto} registroEditando={registroEditando} setRegistros={setRegistros} registros={registros} setPedidoActualizado={setPedidoActualizado} />
+
+            <BuscarProducto productos={productos} setModalProducto={setModalProducto} modalProducto={modalProducto} handleAgregarProducto={handleAgregarProducto} />
 
             <ModalOtro modalOtro={modalOtro} setModalOtro={setModalOtro} setRegistroEditando={setRegistroEditando} />
         </>

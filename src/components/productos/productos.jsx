@@ -69,6 +69,9 @@ const Productos = () => {
     const agregarProducto = async () => {
         if (!nombre || !precio || !codigo){
             setAgregarContenido(true);
+            setTimeout(() => {
+              setAgregarContenido(false);
+          }, 3000);
             return;
         }
         
@@ -81,6 +84,9 @@ const Productos = () => {
 
             if (!nombreSnapshot.empty) {
                 setExisteNombre(true);
+                setTimeout(() => {
+                  setExisteNombre(false);
+              }, 3000);
                 return;
             }
 
@@ -90,6 +96,9 @@ const Productos = () => {
 
             if (!codigoSnapshot.empty) {
                 setExisteCodigo(true);
+                setTimeout(() => {
+                  setExisteCodigo(false);
+              }, 3000);
                 return;
             }
 
