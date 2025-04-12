@@ -12,6 +12,7 @@ const Navbar = () => {
         "/Viaje_pedidos": "Viaje de Pedidos",
         "/Clientes": "Clientes",
         "/Productos": "Productos",
+        "/Eventos": "Eventos",
         "/Consultar_ventas": "Consultar Ventas",
     };
 

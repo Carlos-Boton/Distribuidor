@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon,ClipboardDocumentListIcon,WrenchScrewdriverIcon,TruckIcon,UserGroupIcon,ChartBarIcon,CubeIcon,PlusCircleIcon,BanknotesIcon,CalendarDaysIcon  } from "@heroicons/react/24/solid";
+
 
 
 const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
@@ -27,14 +28,12 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
 
                 <ul>
                     {/* Opción 1 con submenú */}
-                    <li className="py-2">
+                    <li className="py-2 mb-3">
                         <button
                             className="flex items-center w-full text-left ml-2"
                             onClick={() => toggleSubmenu(1)}
                         >
-                            <strong>PEDIDOS</strong> {openSubmenu === 1 &&(
-                                <><ChevronDownIcon className="w-5 h-5 ml-2" /></>
-                            )}
+                            <ClipboardDocumentListIcon className="h-6 w-6 text-white" /><strong>PEDIDOS</strong><ChevronDownIcon className="w-5 h-5 ml-2" />
                             {
                                 openSubmenu === null && (
                                     <></>
@@ -43,48 +42,51 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
                         </button>
                         {openSubmenu === 1 && (
                         <ul className="pl-4 mt-2">
-                            <li className="py-1">
-                                <Link to="/" className="block ml-2">GENARAR PEDIDO</Link>
+                            <li className="py-1 flex items-center">
+                            <PlusCircleIcon className="h-6 w-6 text-white" /><Link to="/" className="block ml-2"><strong>GENARAR PEDIDO</strong></Link>
                             </li>
-                            <li className="py-1">
-                                <Link to="/Viaje_pedidos" className="block ml-2">VIAJE DE PEDIDOS</Link>
+                            <li className="py-1 flex items-center">
+                            <TruckIcon className="h-6 w-6 text-white" /><Link to="/Viaje_pedidos" className="block ml-2"><strong>VIAJE DE PEDIDOS</strong></Link>
                             </li>
                         </ul>
                     )}
                     </li>
 
                     {/* Opción 2 con submenú */}
-                    <li className="py-2">
+                    <li className="py-2 mb-3">
                         <button
                             className="flex items-center w-full text-left ml-2"
                             onClick={() => toggleSubmenu(2)}
                         >
-                            <strong>GESTION</strong> <ChevronDownIcon className="w-5 h-5 ml-2" />
+                            <WrenchScrewdriverIcon className="h-6 w-6 text-white" /><strong>GESTION</strong> <ChevronDownIcon className="w-5 h-5 ml-2" />
                         </button>
                         {openSubmenu === 2 && (
                             <ul className="pl-4 mt-2">
-                                <li className="py-1">
-                                    <Link to="/Clientes" className="block ml-2"><strong>CLIENTES</strong></Link>
+                                <li className="py-1 flex items-center">
+                                <UserGroupIcon className="h-6 w-6 text-white" /><Link to="/Clientes" className="block ml-2"><strong>CLIENTES</strong></Link>
                                 </li>
-                                <li className="py-1">
-                                    <Link to="/Productos" className="block ml-2">PRODUCTOS</Link>
+                                <li className="py-1 flex items-center">
+                                <CubeIcon className="h-6 w-6 text-white" /><Link to="/Productos" className="block ml-2"><strong>PRODUCTOS</strong></Link>
+                                </li>
+                                <li className="py-1 flex items-center">
+                                <CalendarDaysIcon className="w-6 h-6 text-white" /><Link to="/Eventos" className="block ml-2"><strong>EVENTOS</strong></Link>
                                 </li>
                             </ul>
                         )}
                     </li>
 
                     {/* Opción 3 con submenú */}
-                    <li className="py-2">
+                    <li className="py-2 mb-3">
                         <button
                             className="flex items-center w-full text-left ml-2"
                             onClick={() => toggleSubmenu(3)}
                         >
-                            <strong>VENTAS</strong> <ChevronDownIcon className="w-5 h-5 ml-2" />
+                            <ChartBarIcon className="h-6 w-6 text-white" /><strong>VENTAS</strong> <ChevronDownIcon className="w-5 h-5 ml-2" />
                         </button>
                         {openSubmenu === 3 && (
                             <ul className="pl-4 mt-2">
-                                <li className="py-1">
-                                    <Link to="/Consultar_ventas" className="block ml-2">CONSULTAR VENTAS</Link>
+                                <li className="py-1 flex items-center">
+                                <BanknotesIcon className="h-6 w-6 text-white"/><Link to="/Consultar_ventas" className="block ml-2"><strong>CONSULTAR VENTAS</strong></Link>
                                 </li>
                             </ul>
                         )}

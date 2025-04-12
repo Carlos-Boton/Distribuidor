@@ -10,6 +10,7 @@ import ConsultarVentas from "./components/consultarVentas/consultarVentas";
 import Clientes from "./components/clientes/clientes";
 import Productos from "./components/productos/productos";
 import Registro from "./components/registro/sesion";
+import Eventos from "./components/eventos/evento";
 
 function App() { // Verifica si estás obteniendo el usuario correctamente
 
@@ -89,6 +90,10 @@ function AppContent() {
             <Route 
                 path="/Productos" 
                 element={user ? <Productos /> : <Navigate to="/login" />} 
+            />
+            <Route 
+                path="/Eventos" 
+                element={user ? <Eventos /> : <Navigate to="/login" />} 
             />
             <Route 
                 path="/Consultar_ventas" 
