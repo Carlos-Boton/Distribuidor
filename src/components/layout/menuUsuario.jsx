@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useAuth } from "../firebase/AutoContext";
 
 const UserMenu = () => {
+  const { logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -33,7 +35,9 @@ const UserMenu = () => {
        <button className="w-full py-2 text-center text-gray-700 hover:bg-gray-200 rounded-lg">
          Perfil
        </button>
-       <button className="w-full py-2 text-red-600 hover:bg-red-100 rounded-lg">
+       <button
+       onClick={logout}
+       className="w-full py-2 text-red-600 hover:bg-red-100 rounded-lg">
          Cerrar sesión
        </button>
      </div>

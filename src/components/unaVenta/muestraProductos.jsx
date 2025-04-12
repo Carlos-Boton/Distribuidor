@@ -65,7 +65,7 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
           setModalTiket(true);
         }
       
-        localStorage.setItem("registros", JSON.stringify([...registrosPrevios, registro]));
+        localStorage.setItem("registros", JSON.stringify([ registro ,...registrosPrevios]));
       
         setTotal(0);
         setMermas([]);

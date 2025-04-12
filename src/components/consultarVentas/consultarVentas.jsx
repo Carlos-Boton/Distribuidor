@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/data";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 
 const ConsultarVentas = () =>{
@@ -19,7 +19,8 @@ const ConsultarVentas = () =>{
     const obtenerRegistro = async () => {
         try {
           const registroRef = collection(db, "registros");
-          const resp = await getDocs(registroRef);
+          const q = query(registroRef, orderBy("fecha", "desc"));
+          const resp = await getDocs(q);
       
           const registrosObtenidos = resp.docs.map((doc) => ({
             ...doc.data(),

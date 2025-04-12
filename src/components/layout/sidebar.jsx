@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
+
 const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
 
     const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -19,7 +20,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
         onClick={toggleSidebar} // Cierra el sidebar cuando se hace clic fuera de él
         >
             <div
-            className="w-64 h-full bg-indigo-700 text-white p-4"
+            className="w-64 h-full bg-yellow-700 text-white p-4"
             onClick={(e) => e.stopPropagation()} // Evita que el click cierre el sidebar
             >
                 <button onClick={toggleSidebar}><h2 className="text-xl font-bold mb-4">DISTRIBUIDOR TIGER</h2></button>
@@ -31,7 +32,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
                             className="flex items-center w-full text-left ml-2"
                             onClick={() => toggleSubmenu(1)}
                         >
-                            PEDIDOS {openSubmenu === 1 &&(
+                            <strong>PEDIDOS</strong> {openSubmenu === 1 &&(
                                 <><ChevronDownIcon className="w-5 h-5 ml-2" /></>
                             )}
                             {
@@ -58,12 +59,12 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
                             className="flex items-center w-full text-left ml-2"
                             onClick={() => toggleSubmenu(2)}
                         >
-                            GESTION <ChevronDownIcon className="w-5 h-5 ml-2" />
+                            <strong>GESTION</strong> <ChevronDownIcon className="w-5 h-5 ml-2" />
                         </button>
                         {openSubmenu === 2 && (
                             <ul className="pl-4 mt-2">
                                 <li className="py-1">
-                                    <Link to="/Clientes" className="block ml-2">CLIENTES</Link>
+                                    <Link to="/Clientes" className="block ml-2"><strong>CLIENTES</strong></Link>
                                 </li>
                                 <li className="py-1">
                                     <Link to="/Productos" className="block ml-2">PRODUCTOS</Link>
@@ -78,7 +79,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
                             className="flex items-center w-full text-left ml-2"
                             onClick={() => toggleSubmenu(3)}
                         >
-                            VENTAS <ChevronDownIcon className="w-5 h-5 ml-2" />
+                            <strong>VENTAS</strong> <ChevronDownIcon className="w-5 h-5 ml-2" />
                         </button>
                         {openSubmenu === 3 && (
                             <ul className="pl-4 mt-2">
