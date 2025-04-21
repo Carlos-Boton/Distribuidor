@@ -22,7 +22,6 @@ const TicketCodigoBarras = ({ valorCode,setModalCode }) => {
                     Regresar
                 </button>
             </div>
-        
         </div>
     );
 };

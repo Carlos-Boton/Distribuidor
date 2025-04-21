@@ -16,12 +16,12 @@ const AgregarCodigo = ({ productos, agregarProducto }) => {
       return (
         <>
             <input
-                type="text"
-                value={codigo}
-                onChange={(e) => setCodigo(e.target.value)}
-                onKeyDown={handleBuscarProducto}
-                placeholder="Ingresa el código y presiona Enter"
-                className="p-2 border border-gray-300 rounded-md w-full"
+            type="text"
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
+            onKeyDown={handleBuscarProducto}
+            placeholder="Ingresa el código y presiona Enter"
+            className="p-2 border border-gray-300 rounded-md w-full"
             />
         </>
       )

@@ -10,7 +10,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
     const [openSubmenu, setOpenSubmenu] = useState(null);
 
     const toggleSubmenu = (index) => {
-    setOpenSubmenu(openSubmenu === index ? null : index);
+        setOpenSubmenu(openSubmenu === index ? null : index);
     };
 
     return(
@@ -30,8 +30,8 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
                     {/* Opción 1 con submenú */}
                     <li className="py-2 mb-3">
                         <button
-                            className="flex items-center w-full text-left ml-2"
-                            onClick={() => toggleSubmenu(1)}
+                        className="flex items-center w-full text-left ml-2"
+                        onClick={() => toggleSubmenu(1)}
                         >
                             <ClipboardDocumentListIcon className="h-6 w-6 text-white" /><strong>PEDIDOS</strong><ChevronDownIcon className="w-5 h-5 ml-2" />
                             {
@@ -55,8 +55,8 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
                     {/* Opción 2 con submenú */}
                     <li className="py-2 mb-3">
                         <button
-                            className="flex items-center w-full text-left ml-2"
-                            onClick={() => toggleSubmenu(2)}
+                        className="flex items-center w-full text-left ml-2"
+                        onClick={() => toggleSubmenu(2)}
                         >
                             <WrenchScrewdriverIcon className="h-6 w-6 text-white" /><strong>GESTION</strong> <ChevronDownIcon className="w-5 h-5 ml-2" />
                         </button>
@@ -78,22 +78,22 @@ const Sidebar = ({ sidebarOpen, toggleSidebar}) => {
                     {/* Opción 3 con submenú */}
                     <li className="py-2 mb-3">
                         <button
-                            className="flex items-center w-full text-left ml-2"
-                            onClick={() => toggleSubmenu(3)}
+                        className="flex items-center w-full text-left ml-2"
+                        onClick={() => toggleSubmenu(3)}
                         >
                             <ChartBarIcon className="h-6 w-6 text-white" /><strong>VENTAS</strong> <ChevronDownIcon className="w-5 h-5 ml-2" />
                         </button>
                         {openSubmenu === 3 && (
                             <ul className="pl-4 mt-2">
                                 <li className="py-1 flex items-center">
-                                <BanknotesIcon className="h-6 w-6 text-white"/><Link to="/Consultar_ventas" className="block ml-2"><strong>CONSULTAR VENTAS</strong></Link>
+                                <BanknotesIcon className="h-6 w-6 text-white"/><Link to="/Consultar_ventas" className="block ml-2"><strong>VENTA SEMANA</strong></Link>
                                 </li>
                             </ul>
                         )}
                     </li>
                 </ul>
-    </div>
-  </div>
+            </div>
+        </div>
     )
 }
 

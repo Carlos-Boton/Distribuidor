@@ -1,5 +1,4 @@
 
-
 const BotonOtro = ({setModalOtroAbierto}) => {
     return(
         <>

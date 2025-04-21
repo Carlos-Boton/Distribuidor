@@ -19,12 +19,12 @@ const ModalOtro = ({modalOtro,setModalOtro,setRegistroEditando}) =>{
                 precio: parseFloat(nuevoProducto.precio),
                 cantidad: parseInt(nuevoProducto.cantidad),
                 subtotal: parseFloat(nuevoProducto.precio) * parseInt(nuevoProducto.cantidad),
-              };
-      
-              const productosActualizados = [...prevRegistro.productos, productoEspecial]
-              const nuevoTotal = prevRegistro.total + productoEspecial.subtotal;
+            };
+    
+            const productosActualizados = [...prevRegistro.productos, productoEspecial]
+            const nuevoTotal = prevRegistro.total + productoEspecial.subtotal;
 
-              return {
+            return {
                 ...prevRegistro,
                 productos: productosActualizados,
                 total: nuevoTotal
@@ -41,9 +41,9 @@ const ModalOtro = ({modalOtro,setModalOtro,setRegistroEditando}) =>{
 
         setRegistroEditando((prevRegistro) => {
       
-              const mermaActualizados = [...prevRegistro.mermas, nuevaMerma]
+            const mermaActualizados = [...prevRegistro.mermas, nuevaMerma]
 
-              return {
+            return {
                 ...prevRegistro,
                 mermas: mermaActualizados,
             };
@@ -58,14 +58,14 @@ const ModalOtro = ({modalOtro,setModalOtro,setRegistroEditando}) =>{
         }
 
         setRegistroEditando((prevRegistro) => {
-      
+
             const clienteActualizados =  nuevoCliente;
 
             return {
-              ...prevRegistro,
-              cliente: clienteActualizados,
-          };
-      });
+                ...prevRegistro,
+                cliente: clienteActualizados,
+            };
+        });
     
         setModalOtro(false);
         setNuevoCliente("");
@@ -73,107 +73,107 @@ const ModalOtro = ({modalOtro,setModalOtro,setRegistroEditando}) =>{
 
     return(
         <>
-        {modalOtro && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                <div className="bg-white p-6 rounded-md w-80">
-                    <div className="flex justify-between mb-4">
-                        <button className={`p-2 ${seccionModal === "producto" ? "font-bold" : ""}`} onClick={() => setSeccionModal("producto")}>
-                            Producto
-                        </button>
-                        <button className={`p-2 ${seccionModal === "merma" ? "font-bold" : ""}`} onClick={() => setSeccionModal("merma")}>
-                            Merma
-                        </button>
-                        <button className={`p-2 ${seccionModal === "cliente" ? "font-bold" : ""}`} onClick={() => setSeccionModal("cliente")}>
-                            Cliente
-                        </button>
-                    </div>
-                    { seccionModal === "producto" ? (
-                        <>  
-                            <label>Producto Especial</label>
-                            <input
-                                type="text"
-                                value={nuevoProducto.producto}
-                                onChange={(e) => setNuevoProducto({ ...nuevoProducto, producto: e.target.value })}
-                                className="p-2 border w-full mb-2"
-                                placeholder="Producto Especial" 
-                            />
-                            <div className="flex space-x-4">
-                                <div className="p-2 w-1/2">
-                                    <label>Cantidad</label>
-                                    <input
-                                        type="number"
-                                        value={nuevoProducto.cantidad}
-                                        onChange={(e) => setNuevoProducto({ ...nuevoProducto, cantidad: e.target.value })}
-                                        className="p-2 border w-full"
-                                    />
-                                </div>
-                                <div className="p-2 w-1/2">
-                                    <label>Precio</label>
-                                    <input
-                                        type="number"
-                                        value={nuevoProducto.precio}
-                                        onChange={(e) => setNuevoProducto({ ...nuevoProducto, precio: e.target.value })}
-                                        className="p-2 border w-full"
-                                        placeholder="Precio"
-                                    />
-                                </div>
-                            </div>
-                            <button
-                            onClick={agregarProductoEspecial}
-                            className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
-                            >
-                                Agregar
+            {modalOtro && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-6 rounded-md w-80">
+                        <div className="flex justify-between mb-4">
+                            <button className={`p-2 ${seccionModal === "producto" ? "font-bold" : ""}`} onClick={() => setSeccionModal("producto")}>
+                                Producto
                             </button>
-                        </>
-                    ) : seccionModal === "merma" ? (
-                        <>
-                            <label>Producto Merma</label>
-                            <input type="text"
-                                value={nuevaMerma.descripcion}
-                                onChange={(e) => setNuevaMerma({ ...nuevaMerma, descripcion: e.target.value })}
-                                className="p-2 border w-full mb-2"
-                                placeholder="Producto Merma" 
-                            />
-                            <label>Cantidad</label>
-                            <input
-                                type="number"
-                                value={nuevaMerma.cantidad}
-                                onChange={(e) => setNuevaMerma({ ...nuevaMerma, cantidad: e.target.value })}
-                                className="p-2 border w-full mb-2"
-                            />
-                            <button
-                            onClick={agregarMerma}
-                            className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
-                            >
-                                Agregar
+                            <button className={`p-2 ${seccionModal === "merma" ? "font-bold" : ""}`} onClick={() => setSeccionModal("merma")}>
+                                Merma
                             </button>
-                        </>
-                    ) : (
-                        <>
-                            <label>Cliente</label>
-                            <input type="text"
-                                value={nuevoCliente}
-                                onChange={(e) => setNuevoCliente(e.target.value)}
-                                className="p-2 border w-full mb-2"
-                                placeholder="Cliente" 
-                            />
+                            <button className={`p-2 ${seccionModal === "cliente" ? "font-bold" : ""}`} onClick={() => setSeccionModal("cliente")}>
+                                Cliente
+                            </button>
+                        </div>
+                        { seccionModal === "producto" ? (
+                            <>  
+                                <label>Producto Especial</label>
+                                <input
+                                    type="text"
+                                    value={nuevoProducto.producto}
+                                    onChange={(e) => setNuevoProducto({ ...nuevoProducto, producto: e.target.value })}
+                                    className="p-2 border w-full mb-2"
+                                    placeholder="Producto Especial" 
+                                />
+                                <div className="flex space-x-4">
+                                    <div className="p-2 w-1/2">
+                                        <label>Cantidad</label>
+                                        <input
+                                            type="number"
+                                            value={nuevoProducto.cantidad}
+                                            onChange={(e) => setNuevoProducto({ ...nuevoProducto, cantidad: e.target.value })}
+                                            className="p-2 border w-full"
+                                        />
+                                    </div>
+                                    <div className="p-2 w-1/2">
+                                        <label>Precio</label>
+                                        <input
+                                            type="number"
+                                            value={nuevoProducto.precio}
+                                            onChange={(e) => setNuevoProducto({ ...nuevoProducto, precio: e.target.value })}
+                                            className="p-2 border w-full"
+                                            placeholder="Precio"
+                                        />
+                                    </div>
+                                </div>
+                                <button
+                                onClick={agregarProductoEspecial}
+                                className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
+                                >
+                                    Agregar
+                                </button>
+                            </>
+                        ) : seccionModal === "merma" ? (
+                            <>
+                                <label>Producto Merma</label>
+                                <input type="text"
+                                    value={nuevaMerma.descripcion}
+                                    onChange={(e) => setNuevaMerma({ ...nuevaMerma, descripcion: e.target.value })}
+                                    className="p-2 border w-full mb-2"
+                                    placeholder="Producto Merma" 
+                                />
+                                <label>Cantidad</label>
+                                <input
+                                    type="number"
+                                    value={nuevaMerma.cantidad}
+                                    onChange={(e) => setNuevaMerma({ ...nuevaMerma, cantidad: e.target.value })}
+                                    className="p-2 border w-full mb-2"
+                                />
+                                <button
+                                onClick={agregarMerma}
+                                className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
+                                >
+                                    Agregar
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <label>Cliente</label>
+                                <input type="text"
+                                    value={nuevoCliente}
+                                    onChange={(e) => setNuevoCliente(e.target.value)}
+                                    className="p-2 border w-full mb-2"
+                                    placeholder="Cliente" 
+                                />
 
-                            <button
-                            onClick={agregarOtroCliente}
-                            className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
-                            >
-                                Agregar
-                            </button>
-                        </>
-                    )}
-                        <>
-                            <button onClick={() => setModalOtro(false)} className="bg-gray-500 text-white p-2 rounded-md w-full">
-                                    Cancelar
-                            </button>
-                        </>
+                                <button
+                                onClick={agregarOtroCliente}
+                                className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
+                                >
+                                    Agregar
+                                </button>
+                            </>
+                        )}
+                            <>
+                                <button onClick={() => setModalOtro(false)} className="bg-gray-500 text-white p-2 rounded-md w-full">
+                                        Cancelar
+                                </button>
+                            </>
+                    </div>
                 </div>
-            </div>
-        )}
+            )}
         </>
     )
 }

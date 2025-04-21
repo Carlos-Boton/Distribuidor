@@ -22,18 +22,18 @@ const IngresarProductos = ({handleAgregarProducto,productos,setModalOtro,setModa
                 Otro
             </button>
             <input
-                type="text"
-                value={codigo}
-                onChange={(e) => setCodigo(e.target.value)}
-                onKeyDown={handleBuscarProducto}
-                placeholder="Ingresa el código y presiona Enter"
-                className="p-2 border border-gray-300 rounded-md w-full"
+            type="text"
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
+            onKeyDown={handleBuscarProducto}
+            placeholder="Ingresa el código y presiona Enter"
+            className="p-2 border border-gray-300 rounded-md w-full"
             />
             <button
             onClick={() => setModalProducto(true)}
             className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
             >
-                    🔍
+                🔍
             </button>
         </>
     )

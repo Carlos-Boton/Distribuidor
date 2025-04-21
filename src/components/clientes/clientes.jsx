@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/data";
-import { collection, addDoc, getDocs, getDoc, doc, updateDoc } from "firebase/firestore";
-import { PrinterIcon, PencilIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { collection, addDoc, getDocs, getDoc, query, where, doc, updateDoc } from "firebase/firestore";
+import { PencilIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 
 
 
 const Clientes = () => {
     const [id,setId] = useState("");
-    const [clientes, setClientes] = useState([]);
-    const [clienteEditado, setClienteEditando] = useState(null);
     const [nombre, setNombre] = useState("");
-    const [modoEdicion, setModoEdicion] = useState(false);
+    const [busqueda, setBusqueda] = useState("");
+    const [clientes, setClientes] = useState([]);
+    const [clienteId, setClienteId] =useState(false);
     const [actualizar, setActualizar] = useState(false);
+    const [modoEdicion, setModoEdicion] = useState(false);
+    const [existeNombre, setExisteNombre] = useState(false);
+    const [alertaAgregar, setAlertaAgregar] = useState(false);
+    const [agregarContenido, setAgregarContenido] = useState(false);
+    const [alertaActualizar, setAlertaActualizar] = useState(false);
 
     const regresar = () => {
         setNombre("");
@@ -21,32 +26,56 @@ const Clientes = () => {
 
     useEffect(() => {
         obtenerClientes();
-      }, []);
+    }, []);
 
-      const obtenerClientes = () => {
+    const obtenerClientes = () => {
         const clientesRef = collection(db, "clientes");
         getDocs(clientesRef).then((resp) => {
             setClientes(
-            resp.docs.map((doc) => {
-              return { ...doc.data(), id: doc.id };
-            })
-          );
+                resp.docs.map((doc) => {
+                return { ...doc.data(), id: doc.id };
+                })
+            );
         });
-      };
+    };
 
     const agregarCliente = async () => {
-        if (!nombre) return;
+        if (!nombre) {
+            setAgregarContenido(true);
+            setTimeout(() => {
+              setAgregarContenido(false);
+            }, 3000);
+            return;
+        };
         
         try {
+            const clientesRef = collection(db, "clientes");
+            
+            // Verificar si ya existe por nombre
+            const nombreQuery = query(clientesRef, where("cliente", "==", nombre.trim()));
+            const nombreSnapshot = await getDocs(nombreQuery);
+
+            if (!nombreSnapshot.empty) {
+                setExisteNombre(true);
+                setTimeout(() => {
+                    setExisteNombre(false);
+                }, 3000);
+                return;
+            }
             const nuevoCliente = {
                 cliente: nombre,
                 habilitado: true,
             };
-            const docRef = await addDoc(collection(db, "clientes"), nuevoCliente);
-            console.log("Producto agregado correctamente");
+            await addDoc(collection(db, "clientes"), nuevoCliente);
             setClientes([...clientes, nuevoCliente]);
             setNombre("");
             setModoEdicion(false)
+            setAlertaAgregar(true); // Muestra la alerta
+        
+            // Ocultar la alerta después de 3 segundos
+            setTimeout(() => {
+                setAlertaAgregar(false);
+            }, 3000);
         } catch (error) {
             console.error("Error al agregar el cliente:", error);
         }
@@ -60,7 +89,6 @@ const Clientes = () => {
     
             if (clienteSnap.exists()) {
                 const clienteData = clienteSnap.data(); // Guardamos los datos en una variable
-                setClienteEditando({ id, ...clienteData }); 
     
                 // Usamos productoData en lugar de productoEditando
                 setId(id);
@@ -68,7 +96,11 @@ const Clientes = () => {
                 setModoEdicion(true);
                 setActualizar(true);
             } else {
-                console.log("No se encontró el cliente con ID:", id);
+                setClienteId(true)
+                // Ocultar la alerta después de 3 segundos
+                setTimeout(() => {
+                    setClienteId(false);
+                }, 3000);
             }
         } catch (error) {
             console.error("Error al obtener el cliente:", error);
@@ -87,18 +119,28 @@ const Clientes = () => {
             await updateDoc(clienteRef, nuevosDatos); // Actualiza los datos
             console.log("Cliente actualizado correctamente");
             obtenerClientes();
-          } catch (error) {
+            setAlertaActualizar(true);
+            setTimeout(() => {
+                setAlertaActualizar(false);
+            }, 3000);
+        } catch (error) {
             console.error("Error al actualizar el cliente:", error);
-          }
+        }
         setModoEdicion(false);
         setNombre("");
+        setActualizar(false);
     };
 
     const toggleHabilitado = (index) => {
-        const productosActualizados = [...clientes];
-        productosActualizados[index].habilitado = !productosActualizados[index].habilitado;
-        setClientes(productosActualizados);
+        const clientesActualizados = [...clientes];
+        clientesActualizados[index].habilitado = !clientesActualizados[index].habilitado;
+        setClientes(clientesActualizados);
     };
+
+    const clientitos = clientes.filter(
+        (p) =>
+        p.cliente.toLowerCase().includes(busqueda.toLowerCase())
+    );
 
   return (
     <div>
@@ -128,9 +170,18 @@ const Clientes = () => {
                     </>
                 ) : (
                     <div>
-                        <button onClick={() => setModoEdicion(true)} className="bg-blue-500 text-white p-2 rounded-md mb-4">
-                            Nuevo
-                        </button>
+                        <div className="flex justify-between space-x-3 mb-4">
+                            <button onClick={() => setModoEdicion(true)} className="bg-blue-500 text-white p-2 rounded-md mb-4">
+                                Nuevo
+                            </button>
+                            <input
+                            type="text"
+                            value={busqueda}
+                            onChange={(e) => setBusqueda(e.target.value)}
+                            placeholder="Buscar producto"
+                            className="p-2 border border-gray-300 rounded-md w-full mb-4"
+                            />
+                        </div>
                         <h3 className="mt-4 font-bold">Lista de Clientes</h3>
                         <table className="w-full border-collapse border border-gray-300 my-4">
                             <thead>
@@ -140,14 +191,16 @@ const Clientes = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {clientes.map((c, i) => (
+                                {clientitos.map((c, i) => (
                                     <tr key={i} className={!c.habilitado ? "bg-red-200" : ""}>
                                         <td className="border border-gray-300 p-2">
                                             <button onClick={() => toggleHabilitado(i)} className={`text-white p-1 mr-2 rounded-md ${
                                             c.habilitado ? "bg-red-600 hover:bg-red-700" : "bg-green-500 hover:bg-green-600"}`}>{c.habilitado ? (<><XCircleIcon className='h-6 w-6 text-white-500' /></>) : (<><CheckCircleIcon className='h-6 w-6 text-white-500' /></>)}</button>
                                             <button onClick={() => editarCliente(c.id)} className="bg-blue-500 text-white p-1 mr-2 rounded-md"><PencilIcon className="h-6 w-6 text-white-500" /></button>
                                         </td>
-                                        <td className="border border-gray-300 p-2">{c.cliente}</td>
+                                        <td className="border border-gray-300 p-2">
+                                            {c.cliente}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -155,6 +208,76 @@ const Clientes = () => {
                     </div>
                 )}
             </div>
+            {existeNombre && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                        <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Error!</h2>
+                        <p className="text-gray-600 mb-6">El cliente ya existe</p>
+                        <button
+                        onClick={() => setExisteNombre(false)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                        >
+                            Entendido
+                        </button>
+                    </div>
+                </div>
+            )}
+            {alertaAgregar && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                    <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Agregado!</h2>
+                    <p className="text-gray-700 mb-6">El cliente ha sido Agregado</p>
+                    <button
+                    onClick={() => setAlertaAgregar(false)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                    >
+                        Entendido
+                    </button>
+                    </div>
+                </div>
+            )}
+            {agregarContenido && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                    <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Alerta!</h2>
+                    <p className="text-gray-700 mb-6">Agrega al cliente</p>
+                    <button
+                    onClick={() => setAgregarContenido(false)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                    >
+                        Entendido
+                    </button>
+                    </div>
+                </div>
+            )}
+            {alertaActualizar && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                    <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Actualizado!</h2>
+                    <p className="text-gray-700 mb-6">El cliente a sido Actualizado</p>
+                    <button
+                    onClick={() => setAlertaActualizar(false)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                    >
+                        Entendido
+                    </button>
+                    </div>
+                </div>
+            )}
+            {clienteId && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                    <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Error!</h2>
+                    <p className="text-gray-700 mb-6">Cliente no encontrado</p>
+                    <button
+                    onClick={() => setClienteId(false)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                    >
+                        Entendido
+                    </button>
+                    </div>
+                </div>
+            )}
     </div>
   );
 };

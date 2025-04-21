@@ -9,7 +9,7 @@ const BotonCliente = ({ setModalClientesAbierto,clienteSeleccionado }) => {
                 </ul>
                 <button
                 onClick={() => setModalClientesAbierto(true)}
-                    className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+                className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
                 >
                     Seleccionar Cliente
                 </button>
