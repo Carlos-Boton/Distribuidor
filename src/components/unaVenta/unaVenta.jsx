@@ -1,5 +1,5 @@
 import { useState, useEffect} from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, updateDoc} from "firebase/firestore";
 import { db } from "../firebase/data"
 import ModalOtro from "./modalOtro";
 import jsPDF from "jspdf";
@@ -26,36 +26,47 @@ const UnaVenta = () =>{
     const [modalOtroAbierto, setModalOtroAbierto] = useState(false);
     const [modalAbierto, setModalAbierto] = useState(false);
     const [modalTiket, setModalTiket] = useState(false);
+    const [modalEvento, setModalEvento] = useState(false)
     const [modalClientesAbierto, setModalClientesAbierto] = useState(false);
     const [semana, setSemana] = useState(false);
 
-
     useEffect(() => {
-        const ahora = new Date().toLocaleDateString("en-GB");
-        const fechisima = localStorage.getItem("fecha_ayer");
-        if(ahora === fechisima){
-            setSemana(true);
-            const hoy = new Date();
-
-            // 2. Restar un día
-            hoy.setDate(hoy.getDate() + 7);
-
-            // 3. Formatear la fecha (ej. "14/04/2025")
-            const fechaAyer = hoy.toLocaleDateString("en-GB");
-
-            // 4. Guardarla en localStorage
-            localStorage.setItem("fecha_ayer", fechaAyer);
-            console.log("fecha nueva ", fechaAyer);
-        }
+        fechaPdf();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    const fechaPdf = async () => {
+        // localStorage.removeItem("fecha_ayer");
+        const fechisima = localStorage.getItem("fecha_ayer");
+        
+        if(fechisima === null){
+            const fechaGuardar = doc(db, "fecha_pdf", "sOyJ7XlTqqhlRs47GCd1");
+            const docSnap = await getDoc(fechaGuardar);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                localStorage.setItem("fecha_ayer", data.fechapdf);
+                fechaPdf();
+            } else {
+                console.log("No existe el documento");
+            }
+        } else {
+            const ahora = new Date().toLocaleDateString("en-GB");
+            if(ahora === fechisima){
+                setSemana(true);
+            }
+        }
+    }
 
     const generarPDF = () => {
         const data = localStorage.getItem("registros");
-        if (!data) return;
+        if (!data) {
+            setNuevaSemana()
+            setSemana(false);
+            return
+        };
       
         const registros = JSON.parse(data);
-
-        console.log(registros)
       
         const doc = new jsPDF();
         doc.setFontSize(16);
@@ -144,9 +155,27 @@ const UnaVenta = () =>{
         localStorage.removeItem("registros");
       
         doc.save(nombreArchivo);
-        setSemana(false)
+
+        setSemana(false);
+        setNuevaSemana();
     };
 
+    const setNuevaSemana = async () => {
+        const hoy = new Date();
+    
+        // 2. Restar un día
+        hoy.setDate(hoy.getDate() + 7);
+
+        // 3. Formatear la fecha (ej. "14/04/2025")
+        const fechaAyer = hoy.toLocaleDateString("en-GB");
+        const fechaRef = doc(db, "fecha_pdf", "sOyJ7XlTqqhlRs47GCd1");
+        const fechaCambio = {
+            fechapdf: fechaAyer
+        }
+        await updateDoc(fechaRef, fechaCambio);
+        // 4. Guardarla en localStorage
+        localStorage.setItem("fecha_ayer", fechaAyer);
+    }
 
     useEffect(() => {
         const productosRef = collection(db, "productos");
@@ -209,13 +238,13 @@ const UnaVenta = () =>{
                         <AgregarCodigo productos={productos} agregarProducto={agregarProducto}/>
                         <BotonBuscar setModalAbierto={setModalAbierto}/>
                     </div>
-                    <MuestraProducto productosSeleccionados={productosSeleccionados} total={total} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} viaje={viaje} setViaje={setViaje}  mermas={mermas} clienteSeleccionado={clienteSeleccionado} setTiketImpreso={setTiketImpreso} setModalTiket={setModalTiket} />
+                    <MuestraProducto productosSeleccionados={productosSeleccionados} total={total} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} viaje={viaje} setViaje={setViaje}  mermas={mermas} clienteSeleccionado={clienteSeleccionado} setTiketImpreso={setTiketImpreso} setModalTiket={setModalTiket} modalEvento={modalEvento} setModalEvento={setModalEvento} />
                     <Mermas mermas={mermas} setMermas={setMermas}/>
                 </div>
             )}
         
             <BuscarProducto productos={productos} modalAbierto={modalAbierto} setModalAbierto={setModalAbierto} agregarProducto={agregarProducto}/>
-            <ModalOtro modalOtroAbierto={modalOtroAbierto} setModalOtroAbierto={setModalOtroAbierto} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} />
+            <ModalOtro modalOtroAbierto={modalOtroAbierto} setModalOtroAbierto={setModalOtroAbierto} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} setModalEvento={setModalEvento} />
             <ModalCliente setModalClientesAbierto={setModalClientesAbierto} modalClientesAbierto={modalClientesAbierto} setClienteSeleccionado={setClienteSeleccionado} clientes={clientes} />
             {semana && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">

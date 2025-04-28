@@ -1,11 +1,14 @@
 import { useState } from "react";
 
-
-const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,setProductosSeleccionados,setTotal,setMermas,viaje,setViaje,clienteSeleccionado,mermas,setTiketImpreso,setModalTiket}) => {
+const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,setProductosSeleccionados,setTotal,setMermas,viaje,setViaje,clienteSeleccionado,mermas,setTiketImpreso,setModalTiket,modalEvento,setModalEvento}) => {
 
     const [agregaCliente, setAgregaCliente] = useState(false);
     const [agregaProducto, setAgregaProducto] = useState(false);
     const [guardadoExito, setGuardadoExito] = useState(false);
+    const [direccion, setDireccion] = useState(false);
+    const [nuevaDireccion, setNuevaDireccion] = useState("");
+    const [fechaEvento, setFechaEvento] = useState("");
+    const flecha = "----->"
 
     const generarCodigoUnico = (registros) => {
         let intentos = 0;
@@ -23,7 +26,6 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
         return null; // no se pudo generar un código único
     };
       
-
     const handleGuardarRegistro = () => {
         if (!clienteSeleccionado) {
             setAgregaCliente(true);
@@ -40,43 +42,81 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
             }, 3000);
             return;
         }
-      
-        const registrosPrevios = JSON.parse(localStorage.getItem("registros")) || [];
-      
-        const codigoGenerado = generarCodigoUnico(registrosPrevios);
 
-        if (!codigoGenerado) {
-            alert("No se pudo generar un ID único");
-            return;
-        }
-
-        const registro = {
-            id: codigoGenerado,
-            cliente: clienteSeleccionado,
-            productos: productosSeleccionados,
-            mermas: mermas.length > 0 ? mermas : [],
-            total: total,
-            viaje: viaje,
-            fecha: new Date().toLocaleDateString("en-GB")
-        };
+        if (viaje === "evento"){
+            const eventosPrevios = JSON.parse(localStorage.getItem("eventos")) || [];
       
-        if (viaje === "0") {
-            setTiketImpreso(registro);
+            const codigoGenerado = generarCodigoUnico(eventosPrevios);
+
+            if (!codigoGenerado) {
+                alert("No se pudo generar un ID único");
+                return;
+            }
+
+            const evento = {
+                id: codigoGenerado,
+                cliente: clienteSeleccionado,
+                productos: productosSeleccionados,
+                mermas: mermas.length > 0 ? mermas : [],
+                total: total,
+                viaje: viaje,
+                direccion: nuevaDireccion,
+                fecha: fechaEvento
+            };
+        
+            setTiketImpreso(evento);
             setModalTiket(true);
+
+        
+            localStorage.setItem("eventos", JSON.stringify([ evento ,...eventosPrevios]));
+        
+            setTotal(0);
+            setMermas([]);
+            setProductosSeleccionados([]);
+            setClienteSeleccionado(null);
+            setGuardadoExito(true);
+            setTimeout(() => {
+                setGuardadoExito(false);
+            }, 3000);
+        } else {
+            const registrosPrevios = JSON.parse(localStorage.getItem("registros")) || [];
+      
+            const codigoGenerado = generarCodigoUnico(registrosPrevios);
+
+            if (!codigoGenerado) {
+                alert("No se pudo generar un ID único");
+                return;
+            }
+
+            const registro = {
+                id: codigoGenerado,
+                cliente: clienteSeleccionado,
+                productos: productosSeleccionados,
+                mermas: mermas.length > 0 ? mermas : [],
+                total: total,
+                viaje: viaje,
+                fecha: new Date().toLocaleDateString("en-GB")
+            };
+        
+            if (viaje === "0") {
+                setTiketImpreso(registro);
+                setModalTiket(true);
+            }
+        
+            localStorage.setItem("registros", JSON.stringify([ registro ,...registrosPrevios]));
+        
+            setTotal(0);
+            setMermas([]);
+            setProductosSeleccionados([]);
+            setClienteSeleccionado(null);
+            setGuardadoExito(true);
+            setTimeout(() => {
+                setGuardadoExito(false);
+            }, 3000);
         }
       
-        localStorage.setItem("registros", JSON.stringify([ registro ,...registrosPrevios]));
-      
-        setTotal(0);
-        setMermas([]);
-        setProductosSeleccionados([]);
-        setClienteSeleccionado(null);
-        setGuardadoExito(true);
-        setTimeout(() => {
-            setGuardadoExito(false);
-        }, 3000);
     };
-      
+
     const handleEliminarProducto = (codigoProducto) => {
         setProductosSeleccionados((prevProductos) => {
             const productoAEliminar = prevProductos.find((p) => p.codigo === codigoProducto);
@@ -91,6 +131,10 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
 
     const cancelarVenta = () => {
         setClienteSeleccionado(null);
+        setModalEvento(false)
+        setFechaEvento("")
+        setNuevaDireccion("")
+        setViaje("0")
         setProductosSeleccionados([]);
         setMermas([]);
         setTotal(0);
@@ -99,15 +143,29 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
     return (
         <>
             <div className="flex justify-between space-x-3 mb-3">
-                <h3 className="text-lg font-semibold">Productos Agregados</h3>
-                <select value={viaje} onChange={(e) => setViaje(e.target.value)} className="rounded-md border border-gray-400 p-2 mr-2">
-                    <option value="0">Venta</option>
-                    <option value="1">Viaje 1</option>
-                    <option value="2">Viaje 2</option>
-                    <option value="3">Viaje 3</option>
-                    <option value="4">Viaje 4</option>
-                    <option value="5">Vieje 5</option>
-                </select>
+                {modalEvento ? (
+                    <>
+                        <h3 className="text-lg font-semibold">Fecha de entrega {flecha} </h3>
+                        <input
+                        className="rounded-md border border-gray-400 p-2 mr-2"
+                        value={fechaEvento}
+                        onChange={(e) => setFechaEvento(e.target.value)}
+                        type="date" name="" id="" />
+                        {setViaje("evento")}
+                    </>
+                ) : (
+                    <>
+                        <h3 className="text-lg font-semibold">Productos Agregados</h3>
+                        <select value={viaje} onChange={(e) => setViaje(e.target.value)} className="rounded-md border border-gray-400 p-2 mr-2">
+                            <option value="0">Venta</option>
+                            <option value="1">Viaje 1</option>
+                            <option value="2">Viaje 2</option>
+                            <option value="3">Viaje 3</option>
+                            <option value="4">Viaje 4</option>
+                            <option value="5">Vieje 5</option>
+                        </select>
+                    </>
+                )}
             </div>
 
             <table className="w-full border-collapse border border-gray-300">
@@ -143,6 +201,11 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
             <div className="flex justify-between space-x-3 mt-4">
                 <h3 className="text-lg font-semibold mt-4">Total: ${total}</h3>
                 <div>
+                    {modalEvento && (
+                        <button
+                        onClick={() => setDireccion(true)}
+                        className="bg-blue-500 text-white p-2 mr-2 rounded-md hover:bg-blue-600" >Direccion</button>
+                    )}
                     <button
                     onClick={handleGuardarRegistro}
                     className="bg-green-500 text-white p-2 mr-2 rounded-md hover:bg-green-600" >Guardar</button>
@@ -156,12 +219,31 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
                     <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
                         <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Advertencia!</h2>
-                        <p className="text-gray-600 mb-6">El Ingrese el cliente</p>
+                        <p className="text-gray-600 mb-6">Ingrese el cliente</p>
                         <button
                         onClick={() => setAgregaCliente(false)}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                         >
                             Entendido
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {direccion && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                        <p className="text-gray-700 mb-6"><strong>Direccion del evento</strong></p>
+                        <textarea
+                        className="rounded-md border border-gray-400 p-2 w-full mb-4"
+                        value={nuevaDireccion}
+                        onChange={(e) => setNuevaDireccion(e.target.value)}
+                        name="" id=""></textarea>
+                        <button
+                        onClick={() => setDireccion(false)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                        >
+                            Ingresar Direccion
                         </button>
                     </div>
                 </div>

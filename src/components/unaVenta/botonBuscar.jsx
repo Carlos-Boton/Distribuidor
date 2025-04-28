@@ -5,7 +5,7 @@ const BotonBuscar = ({setModalAbierto}) => {
         <>
             <button
             onClick={() => setModalAbierto(true)}
-            className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+            className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600"
             >
                 🔍
             </button>
