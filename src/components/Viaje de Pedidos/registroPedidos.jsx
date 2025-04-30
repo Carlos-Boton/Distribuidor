@@ -45,8 +45,6 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
         setEliminado(true);
     }
 
-    console.log(registros)
-
     const marcarComoEntregado = (id) => {
         const nuevosRegistros = [...registros];
         const registro = nuevosRegistros.find((r) => r.id === id);

@@ -56,8 +56,8 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
         <>
             {modalOtroAbierto && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-2 rounded-md w-80">
-                        <div className="bg-gray-500 flex rounded-md justify-between mb-4">
+                    <div className="bg-white rounded-md w-80">
+                        <div className="bg-gray-700 flex justify-between mb-4">
                             <button className={`p-2 ${seccionModal === "producto" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("producto")}>
                                 Producto
                             </button>
