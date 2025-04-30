@@ -27,7 +27,7 @@ export default function LoginForm() {
 
     return (
         <>
-            <div className="min-h-screen flex items-center justify-center bg-yellow-100">
+            <div className="min-h-screen flex items-center justify-center bg-gray-300">
                 <form
                 onSubmit={iniciarSesion}
                 className="p-6 w-full min-h-screen max-w-md"
@@ -39,13 +39,13 @@ export default function LoginForm() {
                         </div>
                     </div>
 
-                    <div className="relative w-full max-w-sm mx-auto mt-4 mb-8">
+                    <div className="relative w-full max-w-sm mx-auto mt-4 mb-10">
                         {/* Input container */}
                         <div className="relative">
                             {/* Label flotante */}
                             <label
                             className={`absolute left-3 rounded-xl text-gray-500 text-sm transition-all duration-200 ${
-                            email ? "-top-5 text-sm bg-white px-3" : "top-2"
+                            email ? "-top-8 text-xl text-black" : "top-2"
                             }`}
                             >
                                 Correo
@@ -67,8 +67,8 @@ export default function LoginForm() {
                         <div className="relative">
                             {/* Label flotante */}
                             <label
-                            className={`absolute left-3 rounded-xl text-gray-500 text-sm transition-all duration-200 ${
-                                password ? "-top-5 text-sm bg-white px-3" : "top-2"
+                            className={`absolute left-3 text-gray-500 text-sm transition-all duration-200 ${
+                                password ? "-top-8 text-xl text-black" : "top-2"
                             }`}
                             >
                             Contraseña
@@ -99,7 +99,7 @@ export default function LoginForm() {
 
                     <button
                     type="submit"
-                    className="w-full bg-yellow-500 text-white font-semibold py-2 rounded-xl hover:bg-yellow-600 transition duration-200"
+                    className="w-full bg-gray-600 text-white font-semibold py-2 rounded-xl hover:bg-gray-700 transition duration-200"
                     >
                     Iniciar sesión
                     </button>
