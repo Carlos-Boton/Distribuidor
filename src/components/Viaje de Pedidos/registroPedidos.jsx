@@ -1,4 +1,5 @@
 import { useState } from "react";
+import VistaRegistro from "./vistaRegistro";
 
 
 const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEdicion,setModalTiket,setTiketImpreso,pedidoActualizado,setPedidoActualizado}) => {
@@ -6,6 +7,7 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
     const [preguntaEliminar, setPreguntaEliminar] = useState(false);
     const [eliminado, setEliminado] = useState(false);
     const [eliminarId, setEliminarId] = useState(0);
+    const [verEntregado, setVerEntregado] = useState(false);
     // Función para mover un registro hacia arriba usando el id
     const moverArriba = (id) => {
         const index = registros.findIndex((registro) => registro.id === id);
@@ -43,6 +45,8 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
         setEliminado(true);
     }
 
+    console.log(registros)
+
     const marcarComoEntregado = (id) => {
         const nuevosRegistros = [...registros];
         const registro = nuevosRegistros.find((r) => r.id === id);
@@ -50,8 +54,8 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
             registro.entregado = !registro.entregado
         }
     
-        // Ordenar: los no entregados primero, los entregados al final
-        nuevosRegistros.sort((a, b) => (a.entregado === b.entregado ? 0 : a.entregado ? 1 : -1));
+        // // Ordenar: los no entregados primero, los entregados al final
+        // nuevosRegistros.sort((a, b) => (a.entregado === b.entregado ? 0 : a.entregado ? 1 : -1));
     
         setRegistros(nuevosRegistros);
         localStorage.setItem("registros", JSON.stringify(nuevosRegistros));
@@ -76,115 +80,54 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
 
             ) : (
                 <div>
-                    {registrosFiltrados.map((registro) => (
 
-                        // Pregunramos si esta entregado
-                        <div key={registro.id} className={`mb-4 p-4 border rounded-lg shadow-md ${registro.entregado ? "bg-green-200" : "bg-white"}`}>
-                            <div className="flex justify-between space-x-3 mb-3">
-                                <p className="text-2xl"><strong>Cliente:</strong>
-                                {/* Vista del Cliente en Pedido */}
-                                {registro.cliente}</p>
-                                <p className="text-2xl"><strong>viaje:</strong>
-                                {/* Vista de Viaje en Pedido */}
-                                {registro.viaje}</p>
+                    {verEntregado === true  && (
+                        <>
+                            <div className="flex my-4 justify-center">
+                                <button
+                                onClick={() => setVerEntregado(false)}
+                                className="bg-red-600 rounded-md p-2 text-white hover:bg-red-700">Regresar</button>
                             </div>
 
-                            {/* Botón para mover el registro hacia arriba  */}
-                            <button
-                            onClick={() => moverArriba(registro.id)}
-                            className="bg-blue-300 text-white p-2 rounded-md hover:bg-blue-500 ml-2 mr-4">
-                                ▲
-                            </button>
+                            <hr className="mb-4" />
+                        </>
+                    )}
 
-                            {/* Botón para mover el registro hacia abajo  */}
-                            <button
-                            onClick={() => moverAbajo(registro.id)}
-                            className="bg-blue-300 text-white p-2 rounded-md hover:bg-blue-500">
-                                ▼
-                            </button>
+                    {registrosFiltrados.map((registro) => (
 
-                            <p><strong>Productos:</strong></p>
-                            {/* Tabla de productos */}
-                            <table className="w-full border-collapse border border-gray-300 my-4">
-                                <thead>
-                                    <tr className="bg-gray-200">
-                                        <th className="border border-gray-300 p-2">##</th>
-                                        <th className="border border-gray-300 p-2">Producto</th>
-                                        <th className="border border-gray-300 p-2">Precio</th>
-                                        <th className="border border-gray-300 p-2">Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* Vista de cada producto del pedido */}
-                                    {registro.productos.map((prod, i) => (
-                                        <tr key={i} className="text-center">
-                                            <td className="border border-gray-300 p-2">{prod.cantidad}</td>
-                                            <td className="border border-gray-300 p-2">{prod.producto}</td>
-                                            <td className="border border-gray-300 p-2">${prod.precio.toFixed(2)}</td>
-                                            <td className="border border-gray-300 p-2">${(prod.cantidad * prod.precio).toFixed(2)}</td>
-                                        </tr>
-                                    ))}
-                                    {/* Fin de Vista de cada Producto del Pedido */}
-                                </tbody>
-                            </table>
-                            {/* Fin de tabla de productos */}
-
-                            {/* Vista del Total */}
-                            <p className="text-3xl"><strong>Total:</strong> ${registro.total}</p>
-
-                            {/* Preguntamos si tenemos merma */}
-                            {registro.mermas > [0] && (
-                                <div>
-                                    <p><strong>Mermas:</strong></p>
-                                    <table className="w-full border-collapse border border-gray-300 my-4">
-                                        <thead>
-                                            <tr className="bg-red-300">
-                                                <th className="border border-gray-300 p-2">##</th>
-                                                <th className="border border-gray-300 p-2">Merma</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {/* Vista de cada Merma del Pedido */}
-                                            {registro.mermas.map((merma, i) => (
-                                                <tr key={i} className="text-center">
-                                                    <td className="border border-gray-300 p-2">{merma.cantidad}</td>
-                                                    <td className="border border-gray-300 p-2">{merma.descripcion}</td>
-                                                </tr>
-                                            ))}
-                                            {/* Fin de Vista de cada Merma del Pedido */}
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <>
+                            {verEntregado ? (
+                                <>
+                                    {registro.entregado === true &&(
+                                        <>
+                                            <VistaRegistro registro={registro} marcarComoEntregado={marcarComoEntregado} moverArriba={moverArriba} moverAbajo={moverAbajo} abrirModalEdicion={abrirModalEdicion} tiketEnviado={tiketEnviado} eliminarRegistro={eliminarRegistro} />
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    {registro.entregado === false &&(
+                                        <>
+                                            <VistaRegistro registro={registro} marcarComoEntregado={marcarComoEntregado} moverArriba={moverArriba} moverAbajo={moverAbajo} abrirModalEdicion={abrirModalEdicion} tiketEnviado={tiketEnviado} eliminarRegistro={eliminarRegistro} />
+                                        </>
+                                    )}
+                                </>
                             )}
-                            {/* Vista de Fecha */}
-                            <p><strong>Fecha:</strong> {registro.fecha}</p>
-                            {/* Boton para Marcar como Entregado */}
-                            <button
-                            onClick={() => marcarComoEntregado(registro.id)}
-                            className={`p-2 rounded-md text-white mr-2 mb-2 ${
-                            registro.entregado ? "bg-green-600 hover:bg-green-700" : "bg-blue-500 hover:bg-blue-600"
-                            }`}>
-                            {registro.entregado ? "Desentregar" : "Entregado"}
-                            </button>
-                            {/* Boton de Editar Pedido */}
-                            <button
-                            onClick={() => abrirModalEdicion(registro.id)}
-                            className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600 mr-2">
-                                Editar
-                            </button>
-                            <button
-                            onClick={() => tiketEnviado(registro.id)}
-                            className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 mr-2">
-                                imprimir
-                            </button>
-                            {/* Boton de Eliminar Pedido */}
-                            <button
-                            onClick={() => eliminarRegistro(registro.id)}
-                            className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600">
-                                Eliminar
-                            </button>
-                        </div>
+                        </>
+                       
                     ))}
+
+                    {verEntregado === false  && (
+                        <>
+                            <hr className="mt-4" />
+
+                            <div className="flex my-4 justify-center">
+                                <button
+                                onClick={() => setVerEntregado(true)}
+                                className="bg-green-600 rounded-md p-2 text-white hover:bg-green-700">ver entregados</button>
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
 

@@ -12,6 +12,9 @@ const GuardarCancelar = ({setModalAbierto,setRegistros,registros,registroEditand
         localStorage.setItem("registros", JSON.stringify(nuevosRegistros));
         setModalAbierto(false);
         setPedidoActualizado(true);
+        setTimeout(() => {
+            setPedidoActualizado(false);
+        }, 3000);
     };
     //   Fin de Guardar El Pedido Editado
     return(

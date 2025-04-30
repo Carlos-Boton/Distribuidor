@@ -95,7 +95,8 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
                 mermas: mermas.length > 0 ? mermas : [],
                 total: total,
                 viaje: viaje,
-                fecha: new Date().toLocaleDateString("en-GB")
+                fecha: new Date().toLocaleDateString("en-GB"),
+                entregado: false
             };
         
             if (viaje === "0") {
