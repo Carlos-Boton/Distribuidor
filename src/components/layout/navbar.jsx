@@ -30,22 +30,22 @@ const Navbar = () => {
             <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
             {/* Navbar */}
-            <nav className="fixed top-0 left-0 w-full bg-yellow-600 shadow-md z-40 print:hidden">
+            <nav className="fixed top-0 left-0 w-full bg-gray-600 shadow-md z-40 print:hidden">
                 <div className="container mx-auto flex items-center justify-between">
                     {/* Nombre de la app */}
                     <div className="flex items-center">
                         <button
                         onClick={toggleSidebar} // Al hacer clic aquí, se alterna el sidebar
-                        className="bg-yellow-700 p-1 rounded-md text-white text-xl font-semibold ml-2"
+                        className="bg-gray-700 p-2 text-white text-xl font-semibold"
                         >
-                            <Bars3Icon className="h-10 w-10 text-white" />
+                            <Bars3Icon className="h-12 w-12 text-white" />
                         </button>
                     </div>
                     <UserMenu/>
                 </div>
 
                 {/* Franja debajo del Navbar */}
-                <div className="bg-yellow-500 py-2">
+                <div className="bg-gray-500 py-2">
                     <div className="container mx-auto text-center">
                         <h1 className="text-white text-2xl font-semibold">{currentTitle}</h1>
                     </div>

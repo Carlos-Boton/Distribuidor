@@ -13,13 +13,13 @@ const UserMenu = () => {
         
         <div className="relative">
             {/* Nombre de usuario con imagen */}
-            <div className="bg-yellow-700 flex items-center cursor-pointer p-2 m-2 rounded-md" onClick={toggleMenu}>
+            <div className="bg-gray-700 flex items-center cursor-pointer p-3" onClick={toggleMenu}>
                 <img
                 src="https://www.w3schools.com/w3images/avatar2.png" // Reemplaza con la imagen del usuario
                 alt="Usuario"
                 className="w-10 h-10 rounded-full mr-2"
                 />
-                <span className="text-white text-xl font-semibold mr-2">DiezLetras</span>
+                <span className="text-white text-xl font-semibold mr-2">Distribuidor</span>
             </div>
 
             {/* Menú desplegable */}

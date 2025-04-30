@@ -107,50 +107,47 @@ const UnaVenta = () =>{
             doc.setFontSize(14);
             doc.text(`Fecha: ${fecha}`, 14, y);
             y += 6;
-      
+        
             const viajes = Object.keys(agrupados[fecha]).sort((a, b) => a - b);
-      
+        
             viajes.forEach(viaje => {
                 doc.setFontSize(12);
                 doc.text(`Viaje: ${viaje}`, 20, y);
                 y += 5;
+        
                 agrupados[fecha][viaje].forEach(registro => {
-                    const {cliente } = registro;
+                    const { cliente, total, productos } = registro;
+        
+                    doc.setFontSize(11);
                     doc.text(`Cliente: ${cliente}`, 20, y);
                     y += 5;
-                });
-                agrupados[fecha][viaje].forEach(registro => {
-                    const {total } = registro;
-                    doc.text(`Total: ${total}`, 20, y);
-                    y += 2;
-                });
-                const filas = [];
-                agrupados[fecha][viaje].forEach(registro => {
-                const {productos } = registro;
-                
-                    productos.forEach(prod => {
-                        filas.push([
-                            prod.producto,
-                            prod.cantidad,
-                            `$${prod.precio.toFixed(2)}`,
-                            `$${prod.subtotal.toFixed(2)}`
-                        ]);
+                    doc.text(`Total: $${total.toFixed(2)}`, 20, y);
+                    y += 5;
+        
+                    const filas = productos.map(prod => [
+                        prod.producto,
+                        prod.cantidad,
+                        `$${prod.precio.toFixed(2)}`,
+                        `$${prod.subtotal.toFixed(2)}`
+                    ]);
+        
+                    autoTable(doc, {
+                        startY: y,
+                        head: [["Producto", "Cantidad", "Precio", "Subtotal"]],
+                        body: filas,
+                        styles: { fontSize: 10 },
+                        margin: { left: 20 },
+                        theme: "grid",
+                        didDrawPage: data => {
+                            y = data.cursor.y + 10;
+                        }
                     });
-                });
-      
-                autoTable(doc, {
-                    startY: y,
-                    head: [[ "Producto", "Cantidad", "Precio", "Subtotal"]],
-                    body: filas,
-                    styles: { fontSize: 10 },
-                    margin: { left: 20 },
-                    theme: "grid",
-                    didDrawPage: data => {
-                        y = data.cursor.y + 10;
-                    }
+        
+                    y += 5; // Espacio entre pedidos
                 });
             });
         });
+        
 
         localStorage.removeItem("registros");
       
