@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,setProductosSeleccionados,setTotal,setMermas,viaje,setViaje,clienteSeleccionado,mermas,setTiketImpreso,setModalTiket,modalEvento,setModalEvento}) => {
+const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,setProductosSeleccionados,setTotal,setMermas,viaje,setViaje,clienteSeleccionado,mermas,setTiketImpreso,setModalTiket,modalEvento,setModalEvento,direccionSeleccionado}) => {
 
     const [agregaCliente, setAgregaCliente] = useState(false);
     const [agregaProducto, setAgregaProducto] = useState(false);
+    const [agregaDireccion, setAgregaDireccion] = useState(false);
+    const [agregaFecha, setAgregaFecha] = useState(false);
     const [guardadoExito, setGuardadoExito] = useState(false);
-    const [direccion, setDireccion] = useState(false);
-    const [nuevaDireccion, setNuevaDireccion] = useState("");
     const [fechaEvento, setFechaEvento] = useState("");
     const flecha = "----->"
 
@@ -44,6 +44,21 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
         }
 
         if (viaje === "evento"){
+            if (!direccionSeleccionado) {
+                setAgregaDireccion(true);
+                setTimeout(() => {
+                    setAgregaDireccion(false);
+                }, 3000);
+                return;
+            }
+          
+            if (!fechaEvento) {
+                setAgregaFecha(true);
+                setTimeout(() => {
+                    setAgregaFecha(false);
+                }, 3000);
+                return;
+            }
             const eventosPrevios = JSON.parse(localStorage.getItem("eventos")) || [];
       
             const codigoGenerado = generarCodigoUnico(eventosPrevios);
@@ -57,10 +72,9 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
                 id: codigoGenerado,
                 cliente: clienteSeleccionado,
                 productos: productosSeleccionados,
-                mermas: mermas.length > 0 ? mermas : [],
+                direccion: direccionSeleccionado,
                 total: total,
                 viaje: viaje,
-                direccion: nuevaDireccion,
                 fecha: fechaEvento
             };
         
@@ -134,7 +148,6 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
         setClienteSeleccionado(null);
         setModalEvento(false)
         setFechaEvento("")
-        setNuevaDireccion("")
         setViaje("0")
         setProductosSeleccionados([]);
         setMermas([]);
@@ -152,7 +165,7 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
                         value={fechaEvento}
                         onChange={(e) => setFechaEvento(e.target.value)}
                         type="date" name="" id="" />
-                        {setViaje("evento")}
+
                     </>
                 ) : (
                     <>
@@ -202,11 +215,6 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
             <div className="flex justify-between space-x-3 mt-4">
                 <h3 className="text-lg font-semibold mt-4">Total: ${total}</h3>
                 <div>
-                    {modalEvento && (
-                        <button
-                        onClick={() => setDireccion(true)}
-                        className="bg-blue-500 text-white p-2 mr-2 rounded-md hover:bg-blue-600" >Direccion</button>
-                    )}
                     <button
                     onClick={handleGuardarRegistro}
                     className="bg-green-500 text-white p-2 mr-2 rounded-md hover:bg-green-600" >Guardar</button>
@@ -231,25 +239,6 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
                 </div>
             )}
 
-            {direccion && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
-                        <p className="text-gray-700 mb-6"><strong>Direccion del evento</strong></p>
-                        <textarea
-                        className="rounded-md border border-gray-400 p-2 w-full mb-4"
-                        value={nuevaDireccion}
-                        onChange={(e) => setNuevaDireccion(e.target.value)}
-                        name="" id=""></textarea>
-                        <button
-                        onClick={() => setDireccion(false)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
-                        >
-                            Ingresar Direccion
-                        </button>
-                    </div>
-                </div>
-            )}
-
             {agregaProducto && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
                     <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
@@ -257,6 +246,36 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
                         <p className="text-gray-600 mb-6">Agrega un producto para guardar datos</p>
                         <button
                         onClick={() => agregaProducto(false)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                        >
+                            Entendido
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {agregaDireccion && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                        <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Advertencia!</h2>
+                        <p className="text-gray-600 mb-6">Ingrese la direccion de entrega</p>
+                        <button
+                        onClick={() => setAgregaDireccion(false)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                        >
+                            Entendido
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {agregaFecha && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                        <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Advertencia!</h2>
+                        <p className="text-gray-600 mb-6">Ingrese la Fecha de entrega</p>
+                        <button
+                        onClick={() => setAgregaFecha(false)}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                         >
                             Entendido

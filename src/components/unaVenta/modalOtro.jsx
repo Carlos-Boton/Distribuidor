@@ -1,8 +1,9 @@
 import { useState } from "react";
 
-const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSeleccionado, setProductosSeleccionados, setTotal, setMermas,setModalEvento}) => {
+const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSeleccionado, setProductosSeleccionados, setTotal, setMermas,setModalEvento,setViaje,viaje,setDireccionSeleccionado}) => {
     const [seccionModal, setSeccionModal] = useState("producto");
     const [nuevoProducto, setNuevoProducto] = useState({ cantidad: 1, producto: "", precio: "" });
+    const [direccion, setDireccion] = useState("");
     const [nuevaMerma, setNuevaMerma] = useState({ cantidad: 1, descripcion: "" });
     const [nuevoCliente, setNuevoCliente] = useState("");
 
@@ -16,6 +17,18 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
         setClienteSeleccionado (clienteOtro);
         setModalOtroAbierto(false);
         setNuevoCliente("");
+    };
+
+    const agregarDireccion = () => {
+        if (!direccion?.trim()) {
+            return alert("Por favor, ingresa una descripción y cantidad válida.");
+        }
+    
+        const estaDireccion = direccion
+
+        setDireccionSeleccionado(estaDireccion);
+        setModalOtroAbierto(false);
+        setDireccion("");
     };
 
     const agregarProductoEspecial = () => {
@@ -48,6 +61,8 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
     };
 
     const nuevoEvento = () => {
+        setSeccionModal("producto")
+        setViaje("evento")
         setModalEvento(true);
         setModalOtroAbierto(false);
     }
@@ -62,14 +77,28 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
                                 Producto
                             </button>
                             <button className={`p-2 ${seccionModal === "merma" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("merma")}>
-                                Merma
+                                {viaje === "evento" ? (
+                                    <>
+                                        Direccion
+                                    </>
+                                ) : (
+                                    <>
+                                        Merma
+                                    </>
+                                )}
                             </button>
                             <button className={`p-2 ${seccionModal === "cliente" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("cliente")}>
                                 Cliente
                             </button>
-                            <button className={`p-2 ${seccionModal === "evento" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("evento")}>
-                                Evento
-                            </button>
+                            {viaje === "evento" ? (
+                                <></>
+                            ) : (
+                                <>
+                                    <button className={`p-2 ${seccionModal === "evento" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("evento")}>
+                                        Evento
+                                    </button>
+                                </>
+                            )}
                         </div>
                         <div className="p-4">
                             
@@ -114,26 +143,48 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
                             </>
                         ) : seccionModal === "merma" ? (
                             <>
-                                <label>Producto Merma</label>
-                                <input type="text"
-                                value={nuevaMerma.descripcion}
-                                onChange={(e) => setNuevaMerma({ ...nuevaMerma, descripcion: e.target.value })}
-                                className="p-2 border w-full mb-2"
-                                placeholder="Producto Merma" 
-                                />
-                                <label>Cantidad</label>
-                                <input
-                                type="number"
-                                value={nuevaMerma.cantidad}
-                                onChange={(e) => setNuevaMerma({ ...nuevaMerma, cantidad: e.target.value })}
-                                className="p-2 border w-full mb-2"
-                                />
-                                <button
-                                onClick={agregarMerma}
-                                className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
-                                >
-                                    Agregar
-                                </button>
+                                {viaje === "evento" ? (
+                                    <>
+                                        <div className="mb-2">
+                                            <label>Ingrese la direccion</label>
+                                        </div>
+                                        <textarea
+                                        value={direccion}
+                                        onChange={(e) => setDireccion(e.target.value)}
+                                        className="p-2 border border-gray-700 w-full h-32 mb-2"
+                                        name="" id="">
+                                        </textarea>
+                                        <button
+                                        onClick={agregarDireccion}
+                                        className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
+                                        >
+                                            Agregar
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <label>Producto Merma</label>
+                                        <input type="text"
+                                        value={nuevaMerma.descripcion}
+                                        onChange={(e) => setNuevaMerma({ ...nuevaMerma, descripcion: e.target.value })}
+                                        className="p-2 border w-full mb-2"
+                                        placeholder="Producto Merma" 
+                                        />
+                                        <label>Cantidad</label>
+                                        <input
+                                        type="number"
+                                        value={nuevaMerma.cantidad}
+                                        onChange={(e) => setNuevaMerma({ ...nuevaMerma, cantidad: e.target.value })}
+                                        className="p-2 border w-full mb-2"
+                                        />
+                                        <button
+                                        onClick={agregarMerma}
+                                        className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 w-full mb-2"
+                                        >
+                                            Agregar
+                                        </button>
+                                    </>
+                                )}
                             </>
                         ) : seccionModal === "cliente" ? (
                         <>

@@ -72,14 +72,14 @@ const Eventos = () => {
                             <div className='p-2 flex flex-col items-center justify-center'>
                                 <CalendarDaysIcon className="w-16 h-16 text-blue-500 mx-auto mb-4"/>
                             </div>
-                            <div className="bg-yellow-100 p-2 w-full flex justify-between items-center">
+                            <div className="bg-gray-300 p-2 w-full flex justify-between items-center">
                                 <div className='px-2'>
                                     <h1 className="text-2xl font-semibold text-gray-800 mb-2">{evento.cliente}</h1>
                                     <p className="text-gray-800">fecha de entrega: <strong>{evento.fecha}</strong></p>
                                     <p className="text-gray-800">Direccion: <strong>{evento.direccion}</strong></p>
                                 </div>
                                 <button
-                                className='bg-slate-500 text-white border border-orange-200 rounded-lg p-2'
+                                className='bg-red-500 text-white rounded-lg p-2'
                                 onClick={() => abrirModalVista(evento.id)}
                                 >Ver Pedido</button>
                             </div>

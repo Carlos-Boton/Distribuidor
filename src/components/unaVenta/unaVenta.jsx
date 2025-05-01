@@ -22,6 +22,7 @@ const UnaVenta = () =>{
     const [productos, setProductos] = useState([]);
     const [clientes, setClientes] = useState([]);
     const [mermas, setMermas] = useState([]);
+    const [direccionSeleccionado, setDireccionSeleccionado] = useState(null)
     const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
     const [modalOtroAbierto, setModalOtroAbierto] = useState(false);
     const [modalAbierto, setModalAbierto] = useState(false);
@@ -235,13 +236,13 @@ const UnaVenta = () =>{
                         <AgregarCodigo productos={productos} agregarProducto={agregarProducto}/>
                         <BotonBuscar setModalAbierto={setModalAbierto}/>
                     </div>
-                    <MuestraProducto productosSeleccionados={productosSeleccionados} total={total} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} viaje={viaje} setViaje={setViaje}  mermas={mermas} clienteSeleccionado={clienteSeleccionado} setTiketImpreso={setTiketImpreso} setModalTiket={setModalTiket} modalEvento={modalEvento} setModalEvento={setModalEvento} />
-                    <Mermas mermas={mermas} setMermas={setMermas}/>
+                    <MuestraProducto productosSeleccionados={productosSeleccionados} total={total} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} viaje={viaje} setViaje={setViaje}  mermas={mermas} clienteSeleccionado={clienteSeleccionado} setTiketImpreso={setTiketImpreso} setModalTiket={setModalTiket} modalEvento={modalEvento} setModalEvento={setModalEvento} direccionSeleccionado={direccionSeleccionado} />
+                    <Mermas mermas={mermas} setMermas={setMermas} viaje={viaje} direccionSeleccionado={direccionSeleccionado} />
                 </div>
             )}
         
             <BuscarProducto productos={productos} modalAbierto={modalAbierto} setModalAbierto={setModalAbierto} agregarProducto={agregarProducto}/>
-            <ModalOtro modalOtroAbierto={modalOtroAbierto} setModalOtroAbierto={setModalOtroAbierto} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} setModalEvento={setModalEvento} />
+            <ModalOtro modalOtroAbierto={modalOtroAbierto} setModalOtroAbierto={setModalOtroAbierto} setClienteSeleccionado={setClienteSeleccionado} setProductosSeleccionados={setProductosSeleccionados} setTotal={setTotal} setMermas={setMermas} setModalEvento={setModalEvento} setViaje={setViaje} viaje={viaje} setDireccionSeleccionado={setDireccionSeleccionado} />
             <ModalCliente setModalClientesAbierto={setModalClientesAbierto} modalClientesAbierto={modalClientesAbierto} setClienteSeleccionado={setClienteSeleccionado} clientes={clientes} />
             {semana && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
