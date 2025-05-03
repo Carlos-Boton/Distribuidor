@@ -1,6 +1,26 @@
-
+import React, { useRef, useEffect } from "react";
 
 const TodoTiket = ({registrosFiltrados, setModalTiket}) => {
+    const ticketRef = useRef();
+        const hasPrintedRef = useRef(false); // Usamos useRef para rastrear si ya se imprimió
+    
+        // Ejecutamos la impresión automáticamente cuando el componente se monta
+        useEffect(() => {
+            if (registrosFiltrados && !hasPrintedRef.current) {
+                window.print(); // Esto abrirá el diálogo de impresión
+                hasPrintedRef.current = true; // Marcamos que ya se ha impreso
+            }
+        }, [registrosFiltrados]); // Solo se ejecuta cuando el ticket cambia
+    
+        // Redirigir después de la impresión usando un setTimeout
+        useEffect(() => {
+            if (registrosFiltrados) {
+                const timer = setTimeout(() => {
+                }, 100); // Esperamos 2 segundos después de la impresión para redirigir
+    
+                return () => clearTimeout(timer); // Limpiar el temporizador en caso de que el componente se desmonte
+            }
+        }, [registrosFiltrados]);
     return(
         <>
             {registrosFiltrados.map((registro) => (
@@ -8,7 +28,7 @@ const TodoTiket = ({registrosFiltrados, setModalTiket}) => {
             <>
                 {registro.entregado === false &&(
                     <>
-                        <div className="">
+                        <div ref={ticketRef} className="">
                             <div className="text-center">
                                 <h2 className="font-bold text-lg">Distribuidor TIGER</h2>
                                 <p>Calle Independencia #99</p>
