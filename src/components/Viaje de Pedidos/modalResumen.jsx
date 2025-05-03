@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Cog6ToothIcon,XMarkIcon  } from '@heroicons/react/24/outline'
 
-const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSeleccionados,setProductosSeleccionados,resumen,setModalTiket}) => {
+const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSeleccionados,setProductosSeleccionados,resumen,setModalTodoTiket}) => {
     const [seccionModal, setSeccionModal] = useState("resumen");
     
     const toggleSeleccionProducto = (producto) => {
@@ -77,7 +77,7 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
                             ) : (
                                 <div className="h-full">
                                     <button
-                                    onClick={() => setModalTiket(true)}
+                                    onClick={() => setModalTodoTiket(true)}
                                     className="bg-red-500 rounded-md p-2"
                                     >
                                         imprimir todo

@@ -13,6 +13,7 @@ const MostrarRegistros = () => {
     const [filtroViaje, setFiltroViaje] = useState("0"); // Estado del filtro
     const [registroEditando, setRegistroEditando] = useState(null);
     const [modalTiket, setModalTiket] = useState(false);
+    const [modalTodoTiket, setModalTodoTiket] = useState(false);
     const [pedidoActualizado, setPedidoActualizado] = useState(false);
     const [modalAbierto, setModalAbierto] = useState(false);
     const [tiketImpreso, setTiketImpreso] = useState()
@@ -63,25 +64,34 @@ const MostrarRegistros = () => {
         <div className="p-4">
             {!modalAbierto ? (
                 <div>
-                    {!modalTiket ? (
-                    <>
-                        <div className="flex justify-between space-x-3 mb-4 pt-36">
-                            <button
-                            onClick={calcularResumen}
-                            className="mb-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 print:hidden"
-                            >
-                                    Ver Resumen
-                            </button>
-                            <FiltrarViaje setFiltroViaje={setFiltroViaje} filtroViaje={filtroViaje} />
-                        </div>
-                        <RegistroPedidos registrosFiltrados={registrosFiltrados} setRegistros={setRegistros} registros={registros} abrirModalEdicion={abrirModalEdicion} setModalTiket={setModalTiket} setTiketImpreso={setTiketImpreso} pedidoActualizado={pedidoActualizado}  setPedidoActualizado={setPedidoActualizado} />
-                        <ModalResumen modalResumenAbierto={modalResumenAbierto} setModalResumenAbierto={setModalResumenAbierto} productosSeleccionados={productosSeleccionados} setProductosSeleccionados={setProductosSeleccionados} resumen={resumen} setModalTiket={setModalTiket}/>
-                    </>
+                    {!modalTodoTiket ? (
+                        <>
+                            {!modalTiket ? (
+                        <>
+                            <div className="flex justify-between space-x-3 mb-4 pt-36">
+                                <button
+                                onClick={calcularResumen}
+                                className="mb-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 print:hidden"
+                                >
+                                        Ver Resumen
+                                </button>
+                                <FiltrarViaje setFiltroViaje={setFiltroViaje} filtroViaje={filtroViaje} />
+                            </div>
+                            <RegistroPedidos registrosFiltrados={registrosFiltrados} setRegistros={setRegistros} registros={registros} abrirModalEdicion={abrirModalEdicion} setModalTiket={setModalTiket} setTiketImpreso={setTiketImpreso} pedidoActualizado={pedidoActualizado}  setPedidoActualizado={setPedidoActualizado} />
+                            <ModalResumen modalResumenAbierto={modalResumenAbierto} setModalResumenAbierto={setModalResumenAbierto} productosSeleccionados={productosSeleccionados} setProductosSeleccionados={setProductosSeleccionados} resumen={resumen} setModalTodoTiket={setModalTodoTiket}/>
+                        </>
                     ) : (
                         <>
-                            <TodoTicket registrosFiltrados={registrosFiltrados} setModalTiket={setModalTiket} />
+                            <Ticket tiketImpreso={tiketImpreso} setModalTiket={setModalTiket} />
                         </>
                     )}
+                        </>
+                    ) : (
+                        <>
+                            <TodoTicket registrosFiltrados={registrosFiltrados} setModalTodoTiket={setModalTodoTiket} />
+                        </>
+                    )}
+                    
                 </div>
             ) : (
                 <div>

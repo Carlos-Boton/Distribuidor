@@ -17,7 +17,8 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
     useEffect(() => {
         if (tiketImpreso) {
             const timer = setTimeout(() => {
-            }, 100); // Esperamos 2 segundos después de la impresión para redirigir
+                setModalTiket(false)
+            }, 100); // Esperamos 0.1 segundos después de la impresión para redirigir
 
             return () => clearTimeout(timer); // Limpiar el temporizador en caso de que el componente se desmonte
         }
@@ -100,9 +101,6 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
                     <p>SANTO DOMINGO KESTE</p>
                 </div>
             </div>
-
-            {/* Botón de imprimir dentro del ticket */}
-            <button className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 print:hidden" onClick={() => setModalTiket(false)}>Salir</button>
         </div>
     );
 };

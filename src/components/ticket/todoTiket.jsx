@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-const TodoTiket = ({registrosFiltrados, setModalTiket}) => {
+const TodoTiket = ({registrosFiltrados, setModalTodoTiket}) => {
     const ticketRef = useRef();
         const hasPrintedRef = useRef(false); // Usamos useRef para rastrear si ya se imprimió
     
@@ -16,6 +16,7 @@ const TodoTiket = ({registrosFiltrados, setModalTiket}) => {
         useEffect(() => {
             if (registrosFiltrados) {
                 const timer = setTimeout(() => {
+                    setModalTodoTiket(false)
                 }, 100); // Esperamos 2 segundos después de la impresión para redirigir
     
                 return () => clearTimeout(timer); // Limpiar el temporizador en caso de que el componente se desmonte
@@ -107,8 +108,6 @@ const TodoTiket = ({registrosFiltrados, setModalTiket}) => {
             </>
 
             ))}
-
-            <button className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 print:hidden" onClick={() => setModalTiket(false)}>Salir</button>
         </>
     )
 }
