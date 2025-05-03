@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { XMarkIcon  } from '@heroicons/react/24/outline'
+
 
 const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSeleccionado, setProductosSeleccionados, setTotal, setMermas,setModalEvento,setViaje,viaje,setDireccionSeleccionado}) => {
     const [seccionModal, setSeccionModal] = useState("producto");
@@ -70,13 +72,13 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
     return(
         <>
             {modalOtroAbierto && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white rounded-md w-80">
-                        <div className="bg-gray-700 flex justify-between mb-4">
-                            <button className={`p-2 ${seccionModal === "producto" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("producto")}>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white w-[90%] h-[40%] rounded-lg overflow-hidden flex flex-col">
+                        <div className="bg-gray-500 flex justify-between mb-4">
+                            <button className={`p-2 w-full ${seccionModal === "producto" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("producto")}>
                                 Producto
                             </button>
-                            <button className={`p-2 ${seccionModal === "merma" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("merma")}>
+                            <button className={`p-2 w-full ${seccionModal === "merma" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("merma")}>
                                 {viaje === "evento" ? (
                                     <>
                                         Direccion
@@ -87,18 +89,21 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
                                     </>
                                 )}
                             </button>
-                            <button className={`p-2 ${seccionModal === "cliente" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("cliente")}>
+                            <button className={`p-2 w-full ${seccionModal === "cliente" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("cliente")}>
                                 Cliente
                             </button>
                             {viaje === "evento" ? (
                                 <></>
                             ) : (
                                 <>
-                                    <button className={`p-2 ${seccionModal === "evento" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("evento")}>
+                                    <button className={`p-2 w-full ${seccionModal === "evento" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("evento")}>
                                         Evento
                                     </button>
                                 </>
                             )}
+                            <button onClick={() => setModalOtroAbierto(false)} className="bg-red-500 p-2 hover:bg-red-600">
+                                <XMarkIcon className="h-8 w-8 text-black cursor-pointer" />
+                            </button>
                         </div>
                         <div className="p-4">
                             
@@ -219,9 +224,6 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
                             </>
                         )}
                         <>
-                            <button onClick={() => setModalOtroAbierto(false)} className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 w-full">
-                                    Cancelar
-                            </button>
                         </>
                         </div>
                     </div>

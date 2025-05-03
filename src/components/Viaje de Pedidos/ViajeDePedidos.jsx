@@ -37,6 +37,27 @@ const MostrarRegistros = () => {
         }
     };
 
+    const calcularResumen = () => {
+        let totalPedidos = 0;
+        let totalProductos = 0;
+        let productosAgrupados = {};
+    
+        registrosFiltrados.forEach((registro) => {
+            totalPedidos += registro.total;
+            registro.productos.forEach((prod) => {
+                totalProductos += prod.cantidad;
+                if (productosAgrupados[prod.producto]) {
+                    productosAgrupados[prod.producto] += prod.cantidad;
+                } else {
+                    productosAgrupados[prod.producto] = prod.cantidad;
+                }
+            });
+        });
+    
+        setResumen({ totalPedidos, totalProductos, productosAgrupados });
+        setModalResumenAbierto(true);
+    };
+
     return(
         <div className="p-4">
             {!modalAbierto ? (
@@ -44,10 +65,16 @@ const MostrarRegistros = () => {
                     {!modalTiket ? (
                     <>
                         <div className="flex justify-between space-x-3 mb-4 pt-36">
-                            <ModalResumen modalResumenAbierto={modalResumenAbierto} setModalResumenAbierto={setModalResumenAbierto} productosSeleccionados={productosSeleccionados} setProductosSeleccionados={setProductosSeleccionados} setFiltroViaje={setFiltroViaje} resumen={resumen} setResumen={setResumen} registrosFiltrados={registrosFiltrados} />
+                            <button
+                            onClick={calcularResumen}
+                            className="mb-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 print:hidden"
+                            >
+                                    Ver Resumen
+                            </button>
                             <FiltrarViaje setFiltroViaje={setFiltroViaje} filtroViaje={filtroViaje} />
                         </div>
                         <RegistroPedidos registrosFiltrados={registrosFiltrados} setRegistros={setRegistros} registros={registros} abrirModalEdicion={abrirModalEdicion} setModalTiket={setModalTiket} setTiketImpreso={setTiketImpreso} pedidoActualizado={pedidoActualizado}  setPedidoActualizado={setPedidoActualizado} />
+                        <ModalResumen modalResumenAbierto={modalResumenAbierto} setModalResumenAbierto={setModalResumenAbierto} productosSeleccionados={productosSeleccionados} setProductosSeleccionados={setProductosSeleccionados} resumen={resumen} />
                     </>
                     ) : (
                         <>
