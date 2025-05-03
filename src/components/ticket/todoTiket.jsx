@@ -17,7 +17,7 @@ const TodoTiket = ({registrosFiltrados, setModalTodoTiket}) => {
             if (registrosFiltrados) {
                 const timer = setTimeout(() => {
                     setModalTodoTiket(false)
-                }, 100); // Esperamos 2 segundos después de la impresión para redirigir
+                }, 3000); // Esperamos 2 segundos después de la impresión para redirigir
     
                 return () => clearTimeout(timer); // Limpiar el temporizador en caso de que el componente se desmonte
             }
