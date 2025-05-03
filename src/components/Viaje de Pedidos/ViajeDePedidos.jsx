@@ -4,6 +4,7 @@ import RegistroPedidos from "./registroPedidos";
 import EditarPedido from "./EditarPedido";
 import FiltrarViaje from "./filtrarViaje";
 import Ticket from "../ticket/Ticket";
+import TodoTicket from "../ticket/todoTiket";
 
 const MostrarRegistros = () => {
     const [registros, setRegistros] = useState([]);
@@ -74,11 +75,11 @@ const MostrarRegistros = () => {
                             <FiltrarViaje setFiltroViaje={setFiltroViaje} filtroViaje={filtroViaje} />
                         </div>
                         <RegistroPedidos registrosFiltrados={registrosFiltrados} setRegistros={setRegistros} registros={registros} abrirModalEdicion={abrirModalEdicion} setModalTiket={setModalTiket} setTiketImpreso={setTiketImpreso} pedidoActualizado={pedidoActualizado}  setPedidoActualizado={setPedidoActualizado} />
-                        <ModalResumen modalResumenAbierto={modalResumenAbierto} setModalResumenAbierto={setModalResumenAbierto} productosSeleccionados={productosSeleccionados} setProductosSeleccionados={setProductosSeleccionados} resumen={resumen} />
+                        <ModalResumen modalResumenAbierto={modalResumenAbierto} setModalResumenAbierto={setModalResumenAbierto} productosSeleccionados={productosSeleccionados} setProductosSeleccionados={setProductosSeleccionados} resumen={resumen} setModalTiket={setModalTiket}/>
                     </>
                     ) : (
                         <>
-                            <Ticket tiketImpreso={tiketImpreso} setModalTiket={setModalTiket} />
+                            <TodoTicket registrosFiltrados={registrosFiltrados} setModalTiket={setModalTiket} />
                         </>
                     )}
                 </div>

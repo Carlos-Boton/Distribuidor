@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Cog6ToothIcon,XMarkIcon  } from '@heroicons/react/24/outline'
 
-const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSeleccionados,setProductosSeleccionados,resumen}) => {
+const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSeleccionados,setProductosSeleccionados,resumen,setModalTiket}) => {
     const [seccionModal, setSeccionModal] = useState("resumen");
     
     const toggleSeleccionProducto = (producto) => {
@@ -39,8 +39,8 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
                                         <table className="w-full border-collapse border border-gray-300 my-4">
                                             <thead>
                                                 <tr className="bg-gray-200">
+                                                    <th className="border border-gray-300 p-2">#</th>
                                                     <th className="border border-gray-300 p-2">Producto</th>
-                                                    <th className="border border-gray-300 p-2">Cantidad Total</th>
                                                     <th className="border border-gray-300 p-2">Seleccionar</th>
                                                 </tr>
                                             </thead>
@@ -56,8 +56,8 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
                                                     .sort((a, b) => b.litros - a.litros) // Ordena de mayor a menor por litros
                                                     .map(({ producto, cantidad }, i) => (
                                                     <tr key={i} className={productosSeleccionados[producto] ? "bg-green-200" : ""}>
+                                                        <td className="border border-gray-300 p-2"><strong>{cantidad}</strong></td>
                                                         <td className="border border-gray-300 p-2">{producto}</td>
-                                                        <td className="border border-gray-300 p-2">{cantidad}</td>
                                                         <td className="border border-gray-300 p-2 text-center">
                                                             <input
                                                             type="button"
@@ -77,6 +77,7 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
                             ) : (
                                 <div className="h-full">
                                     <button
+                                    onClick={() => setModalTiket(true)}
                                     className="bg-red-500 rounded-md p-2"
                                     >
                                         imprimir todo
