@@ -25,7 +25,7 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
     }, [tiketImpreso]);
 
     return (
-        <div className="flex flex-col pt-32">
+        <div className="flex flex-col">
             {/* Contenedor del ticket */}
             <div ref={ticketRef} className="">
                 <div className="text-center">
