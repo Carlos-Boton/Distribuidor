@@ -60,7 +60,7 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
                                     colSpan="4"
                                     className="text-center"
                                     >
-                                        -----------------------------------
+                                        ----------------------------------------------------
                                     </td>
                                 </tr>
                             </>
