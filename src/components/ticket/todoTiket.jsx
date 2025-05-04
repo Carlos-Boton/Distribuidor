@@ -25,7 +25,7 @@ const TodoTiket = ({registrosFiltrados, setModalTodoTiket}) => {
     return(
         <>
             <button
-            className="bg-red-500 rounded-md p-2 mt-32 mb-5 w-full hover:bg-red-600 mt-4 print:hidden"
+            className="bg-red-500 rounded-md p-2 mt-32 mb-5 w-full hover:bg-red-600 print:hidden"
             onClick={() => setModalTodoTiket(false)}
             >
                 Regresar
