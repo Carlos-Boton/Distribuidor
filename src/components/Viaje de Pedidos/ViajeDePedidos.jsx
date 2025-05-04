@@ -14,6 +14,9 @@ const MostrarRegistros = () => {
     const [registroEditando, setRegistroEditando] = useState(null);
     const [modalTiket, setModalTiket] = useState(false);
     const [modalTodoTiket, setModalTodoTiket] = useState(false);
+    const [preguntaEliminar, setPreguntaEliminar] = useState(false);
+    const [eliminado, setEliminado] = useState(false);
+    const [eliminarId, setEliminarId] = useState(0);
     const [pedidoActualizado, setPedidoActualizado] = useState(false);
     const [modalAbierto, setModalAbierto] = useState(false);
     const [tiketImpreso, setTiketImpreso] = useState()
@@ -38,6 +41,21 @@ const MostrarRegistros = () => {
             setModalAbierto(true);
         }
     };
+
+    const eliminarRegistro = (id) => {
+        setEliminarId(id)
+        setPreguntaEliminar(true);
+    };
+
+    // Fin de Eliminar Registro de Pedido
+    const Eliminacion = (valor) =>{
+        const nuevosRegistros = registros.filter((registro) => registro.id !== valor);
+        setRegistros(nuevosRegistros);
+        localStorage.setItem("registros", JSON.stringify(nuevosRegistros));
+        setPreguntaEliminar(false);
+        setModalAbierto(false)
+        setEliminado(true);
+    }
 
     const calcularResumen = () => {
         let totalPedidos = 0;
@@ -79,6 +97,20 @@ const MostrarRegistros = () => {
                             </div>
                             <RegistroPedidos registrosFiltrados={registrosFiltrados} setRegistros={setRegistros} registros={registros} abrirModalEdicion={abrirModalEdicion} setModalTiket={setModalTiket} setTiketImpreso={setTiketImpreso} pedidoActualizado={pedidoActualizado}  setPedidoActualizado={setPedidoActualizado} />
                             <ModalResumen modalResumenAbierto={modalResumenAbierto} setModalResumenAbierto={setModalResumenAbierto} productosSeleccionados={productosSeleccionados} setProductosSeleccionados={setProductosSeleccionados} resumen={resumen} setModalTodoTiket={setModalTodoTiket}/>
+                            {eliminado && (
+                                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                                        <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Pedido Eliminado!</h2>
+                                        <p className="text-gray-700 mb-6">El pedido se ha Eliminado con exito!!</p>
+                                        <button
+                                        onClick={() => setEliminado(false)}
+                                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                                        >
+                                            Entendido
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </>
                     ) : (
                         <>
@@ -95,7 +127,24 @@ const MostrarRegistros = () => {
                 </div>
             ) : (
                 <div>
-                    <EditarPedido registroEditando={registroEditando} setModalAbierto={setModalAbierto} setRegistroEditando={setRegistroEditando} setRegistros={setRegistros} registros={registros} setPedidoActualizado={setPedidoActualizado} />
+                    <EditarPedido registroEditando={registroEditando} setModalAbierto={setModalAbierto} setRegistroEditando={setRegistroEditando} setRegistros={setRegistros} registros={registros} setPedidoActualizado={setPedidoActualizado} eliminarRegistro={eliminarRegistro} />
+                    {preguntaEliminar && (
+                        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                            <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
+                                <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Eliminar!</h2>
+                                <p className="text-gray-700 mb-6">¿Estas seguro de Eliminar el pedido?</p>
+                                <button onClick={() => Eliminacion(eliminarId)} className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition mr-3">
+                                    Eliminar
+                                </button>
+                                <button
+                                onClick={() => setPreguntaEliminar(false)}
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

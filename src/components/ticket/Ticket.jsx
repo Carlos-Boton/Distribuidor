@@ -17,29 +17,28 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
     useEffect(() => {
         if (tiketImpreso) {
             const timer = setTimeout(() => {
-                setModalTiket(false)
-            }, 3000); // Esperamos 0.1 segundos después de la impresión para redirigir
+                
+            }, 10000); // Esperamos 0.1 segundos después de la impresión para redirigir
 
             return () => clearTimeout(timer); // Limpiar el temporizador en caso de que el componente se desmonte
         }
     }, [tiketImpreso]);
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col pt-32">
             {/* Contenedor del ticket */}
             <div ref={ticketRef} className="">
                 <div className="text-center">
                     <h2 className="font-bold text-lg">Distribuidor TIGER</h2>
                     <p>Calle Independencia #99</p>
                     <p>Tel: 9821038088</p>
-                    <hr className="my-2" />
+                    <hr className="my-3" />
                 </div>
 
-                <p><strong>Fecha:</strong> {tiketImpreso?.fecha || "N/A"}</p>
-                <p><strong>Cliente:</strong> {tiketImpreso?.cliente || "N/A"}</p>
+                <p>Fecha: {tiketImpreso?.fecha || "N/A"}</p>
+                <p className="text-xl">Cliente: <strong>{tiketImpreso?.cliente || "N/A"}</strong> </p>
 
                 <hr className="my-2" />
-                <h1>Producto</h1>
                 <table className="w-full text-sm">
                     <thead>
                         <tr>
@@ -50,11 +49,21 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
                     </thead>
                     <tbody>
                         {tiketImpreso?.productos?.map((p, index) => (
-                            <tr key={index}>
-                                <td className="text-xl">{p.cantidad}</td>
-                                <td className="text-xl">{p.producto}</td>
-                                <td className="text-xl text-right">${(p.cantidad * p.precio)}</td>
-                            </tr>
+                            <>
+                                <tr key={index}>
+                                    <td className="text-xl">{p.cantidad}</td>
+                                    <td className="text-xl">{p.producto}</td>
+                                    <td className="text-xl text-right">${(p.cantidad * p.precio)}</td>
+                                </tr>
+                                <tr>
+                                    <td
+                                    colSpan="4"
+                                    className="text-center"
+                                    >
+                                        -----------------------------------
+                                    </td>
+                                </tr>
+                            </>
                         )) || (
                             <tr>
                                 <td colSpan="4" className="text-center">No hay productos</td>
@@ -92,8 +101,16 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
                     </>
                 )}
 
-                <p className="text-2xl" ><strong>Total:</strong> ${tiketImpreso?.total || "0.00"}</p>
-                <p><strong>N° de Artículos:</strong> {tiketImpreso?.productos?.reduce((acc, p) => acc + p.cantidad, 0) || 0}</p>
+                <div
+                className="flex justify-between"
+                >
+                    <div>
+                        <p>N° de Artículos: <strong>{tiketImpreso?.productos?.reduce((acc, p) => acc + p.cantidad, 0) || 0} </strong> </p>
+                    </div>
+                    <div>
+                        <p className="text-3xl" >Total: <strong>${tiketImpreso?.total || "0.00"}</strong></p>
+                    </div>
+                </div>
 
                 <div className="text-center mt-4">
                     <p>¡Gracias por su compra!</p>
@@ -101,6 +118,13 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
                     <p>SANTO DOMINGO KESTE</p>
                 </div>
             </div>
+
+            <button
+            className="bg-red-500 rounded-md p-2 hover:bg-red-600 mt-4 print:hidden"
+            onClick={() => setModalTiket(false)}
+            >
+                Regresar
+            </button>
         </div>
     );
 };

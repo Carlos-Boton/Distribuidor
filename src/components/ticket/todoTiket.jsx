@@ -16,14 +16,20 @@ const TodoTiket = ({registrosFiltrados, setModalTodoTiket}) => {
         useEffect(() => {
             if (registrosFiltrados) {
                 const timer = setTimeout(() => {
-                    setModalTodoTiket(false)
-                }, 3000); // Esperamos 2 segundos después de la impresión para redirigir
+
+                }, 10000); // Esperamos 2 segundos después de la impresión para redirigir
     
                 return () => clearTimeout(timer); // Limpiar el temporizador en caso de que el componente se desmonte
             }
         }, [registrosFiltrados]);
     return(
         <>
+            <button
+            className="bg-red-500 rounded-md p-2 mt-32 mb-5 w-full hover:bg-red-600 mt-4 print:hidden"
+            onClick={() => setModalTodoTiket(false)}
+            >
+                Regresar
+            </button>
             {registrosFiltrados.map((registro) => (
 
             <>
@@ -52,11 +58,22 @@ const TodoTiket = ({registrosFiltrados, setModalTodoTiket}) => {
                                 </thead>
                                 <tbody>
                                     {registro?.productos?.map((p, index) => (
-                                        <tr key={index}>
-                                            <td className="text-xl">{p.cantidad}</td>
-                                            <td className="text-xl">{p.producto}</td>
-                                            <td className="text-xl text-right">${(p.cantidad * p.precio)}</td>
-                                        </tr>
+                                        <>
+                                            <tr key={index}>
+                                                <td className="text-xl">{p.cantidad}</td>
+                                                <td className="text-xl">{p.producto}</td>
+                                                <td className="text-xl text-right">${(p.cantidad * p.precio)}</td>
+                                            </tr>
+                                            <tr>
+                                            <td
+                                            colSpan="4"
+                                            className="text-center"
+                                            >
+                                                -----------------------------------
+                                            </td>
+                                            </tr>
+                                        </>
+                                        
                                     )) || (
                                         <tr>
                                             <td colSpan="4" className="text-center">No hay productos</td>
@@ -94,10 +111,18 @@ const TodoTiket = ({registrosFiltrados, setModalTodoTiket}) => {
                                 </>
                             )}
 
-                            <p className="text-2xl" ><strong>Total:</strong> ${registro?.total || "0.00"}</p>
-                            <p><strong>N° de Artículos:</strong> {registro?.productos?.reduce((acc, p) => acc + p.cantidad, 0) || 0}</p>
+                            <div
+                            className="flex justify-between"
+                            >
+                                <div>
+                                    <p>N° de Artículos: <strong>{registro?.productos?.reduce((acc, p) => acc + p.cantidad, 0) || 0} </strong> </p>
+                                </div>
+                                <div>
+                                    <p className="text-3xl" >Total: <strong>${registro?.total || "0.00"}</strong></p>
+                                </div>
+                            </div>
 
-                            <div className="text-center my-4">
+                            <div className="text-center my-4 mb-6">
                                 <p>¡Gracias por su compra!</p>
                                 <p>DISTRIBUIDOR TIGER</p>
                                 <p>SANTO DOMINGO KESTE</p>

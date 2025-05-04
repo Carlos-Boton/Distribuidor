@@ -4,9 +4,6 @@ import VistaRegistro from "./vistaRegistro";
 
 const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEdicion,setModalTiket,setTiketImpreso,pedidoActualizado,setPedidoActualizado}) => {
 
-    const [preguntaEliminar, setPreguntaEliminar] = useState(false);
-    const [eliminado, setEliminado] = useState(false);
-    const [eliminarId, setEliminarId] = useState(0);
     const [verEntregado, setVerEntregado] = useState(false);
     // Función para mover un registro hacia arriba usando el id
     const moverArriba = (id) => {
@@ -29,21 +26,6 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
             localStorage.setItem("registros", JSON.stringify(nuevosRegistros)); // Guardar cambios en localStorage
         }
     };
-  
-    // Elimiar Registro de Pedido
-    const eliminarRegistro = (id) => {
-        setEliminarId(id)
-        setPreguntaEliminar(true);
-    };
-
-    // Fin de Eliminar Registro de Pedido
-    const Eliminacion = (valor) =>{
-        const nuevosRegistros = registros.filter((registro) => registro.id !== valor);
-        setRegistros(nuevosRegistros);
-        localStorage.setItem("registros", JSON.stringify(nuevosRegistros));
-        setPreguntaEliminar(false);
-        setEliminado(true);
-    }
 
     const marcarComoEntregado = (id) => {
         const nuevosRegistros = [...registros];
@@ -98,7 +80,7 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
                                 <>
                                     {registro.entregado === true &&(
                                         <>
-                                            <VistaRegistro registro={registro} marcarComoEntregado={marcarComoEntregado} moverArriba={moverArriba} moverAbajo={moverAbajo} abrirModalEdicion={abrirModalEdicion} tiketEnviado={tiketEnviado} eliminarRegistro={eliminarRegistro} />
+                                            <VistaRegistro registro={registro} marcarComoEntregado={marcarComoEntregado} moverArriba={moverArriba} moverAbajo={moverAbajo} abrirModalEdicion={abrirModalEdicion} tiketEnviado={tiketEnviado}/>
                                         </>
                                     )}
                                 </>
@@ -106,7 +88,7 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
                                 <>
                                     {registro.entregado === false &&(
                                         <>
-                                            <VistaRegistro registro={registro} marcarComoEntregado={marcarComoEntregado} moverArriba={moverArriba} moverAbajo={moverAbajo} abrirModalEdicion={abrirModalEdicion} tiketEnviado={tiketEnviado} eliminarRegistro={eliminarRegistro} />
+                                            <VistaRegistro registro={registro} marcarComoEntregado={marcarComoEntregado} moverArriba={moverArriba} moverAbajo={moverAbajo} abrirModalEdicion={abrirModalEdicion} tiketEnviado={tiketEnviado}/>
                                         </>
                                     )}
                                 </>
@@ -143,40 +125,6 @@ const RegistroPedidos = ({registrosFiltrados,setRegistros,registros,abrirModalEd
                     </div>
                 </div>
             )}
-
-            {preguntaEliminar && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
-                        <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Eliminar!</h2>
-                        <p className="text-gray-700 mb-6">¿Estas seguro de Eliminar el pedido?</p>
-                        <button onClick={() => Eliminacion(eliminarId)} className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition mr-3">
-                            Eliminar
-                        </button>
-                        <button
-                        onClick={() => setPreguntaEliminar(false)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
-                        >
-                            Cancelar
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {eliminado && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-                    <div className="bg-white p-6 rounded-2xl shadow-xl w-80 text-center">
-                        <h2 className="text-3xl font-semibold mb-4 text-gray-800">¡Pedido Eliminado!</h2>
-                        <p className="text-gray-700 mb-6">El pedido se ha Eliminado con exito!!</p>
-                        <button
-                        onClick={() => setEliminado(false)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
-                        >
-                            Entendido
-                        </button>
-                    </div>
-                </div>
-            )}
-
         </>
     )
 }

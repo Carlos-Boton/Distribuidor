@@ -97,11 +97,6 @@ const VistaRegistro = ({registro, moverArriba, moverAbajo, marcarComoEntregado,a
                 imprimir
             </button>
             {/* Boton de Eliminar Pedido */}
-            <button
-            onClick={() => eliminarRegistro(registro.id)}
-            className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600">
-                Eliminar
-            </button>
         </div>
     )
 }

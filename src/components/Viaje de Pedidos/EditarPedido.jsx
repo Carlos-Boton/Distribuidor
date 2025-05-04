@@ -7,7 +7,7 @@ import ModalOtro from "./modalOtro";
 import BuscarProducto from "./buscarProducto";
 
 
-const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,registros,setRegistros,setPedidoActualizado}) => {
+const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,registros,setRegistros,setPedidoActualizado,eliminarRegistro}) => {
 
     const [modalOtro, setModalOtro] = useState(false);
     const [viaje, setViaje] = useState(registroEditando.viaje);
@@ -171,7 +171,7 @@ const EditarPedido = ({setModalAbierto,registroEditando,setRegistroEditando,regi
 
                 <BuscarProducto productos={productos} setModalProducto={setModalProducto} modalProducto={modalProducto} handleAgregarProducto={handleAgregarProducto} />
 
-                <ModalOtro modalOtro={modalOtro} setModalOtro={setModalOtro} setRegistroEditando={setRegistroEditando} />
+                <ModalOtro modalOtro={modalOtro} registroEditando={registroEditando} eliminarRegistro={eliminarRegistro} setModalOtro={setModalOtro} setRegistroEditando={setRegistroEditando} />
             </div>
         </>
     )

@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Cog6ToothIcon,XMarkIcon  } from '@heroicons/react/24/outline'
+import { Cog6ToothIcon,XMarkIcon,LockClosedIcon    } from '@heroicons/react/24/outline'
 
 const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSeleccionados,setProductosSeleccionados,resumen,setModalTodoTiket}) => {
     const [seccionModal, setSeccionModal] = useState("resumen");
+    const [pinNumber, setPinNumber] = useState("");
+    const [pinCorrecto, setPinCorrecto] = useState(false);
+    const [pinIncorrecto, setPinIncorrecto] = useState(false);
     
     const toggleSeleccionProducto = (producto) => {
         setProductosSeleccionados((prev) => ({
@@ -10,6 +13,27 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
             [producto]: !prev[producto]
         }));
     };
+
+    const verPin = () => {
+        if ( "6875" === pinNumber){
+            setPinCorrecto(true)
+            setPinNumber("")
+        } else {
+            setPinIncorrecto(true)
+            setTimeout(() => {
+                setPinIncorrecto(false);
+            }, 500);
+        }
+    }
+
+    console.log(pinNumber)
+
+    const ocultarModal = () => {
+        setModalResumenAbierto(false)
+        setPinCorrecto(false)
+        setPinNumber("")
+        setSeccionModal("resumen")
+    }
 
     return(
         <>
@@ -24,7 +48,7 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
                             <button className={`w-full text-lg font-bold ${seccionModal === "resumen" ? "bg-white" : "text-white"}`} onClick={() => setSeccionModal("resumen")}>
                                 Resumen de pedidos
                             </button>
-                            <button onClick={() => setModalResumenAbierto(false)} className="bg-red-500 p-2 hover:bg-red-600">
+                            <button onClick={ocultarModal} className="bg-red-500 p-2 hover:bg-red-600">
                                 <XMarkIcon className="h-8 w-8 text-black cursor-pointer" />
                             </button>
                         </div>
@@ -32,8 +56,7 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
                         <div className="flex-1 overflow-auto p-4">
                             { seccionModal === "resumen" ? (
                                 <div className="h-full">
-                                    <p><strong>Total de Pedidos:</strong> ${resumen.totalPedidos.toFixed(2)}</p>
-                                    <p><strong>Total de Productos:</strong> {resumen.totalProductos}</p>
+                                    <p className="text-xl">Total de Productos: <strong> {resumen.totalProductos} </strong> </p>
                                     <h3 className="mt-4 font-bold mb-2">Productos Agrupados</h3>
                                     <div className="h-[70%] overflow-y-auto border border-gray-300 rounded-md mb-2">
                                         <table className="w-full border-collapse border border-gray-300 my-4">
@@ -56,8 +79,8 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
                                                     .sort((a, b) => b.litros - a.litros) // Ordena de mayor a menor por litros
                                                     .map(({ producto, cantidad }, i) => (
                                                     <tr key={i} className={productosSeleccionados[producto] ? "bg-green-200" : ""}>
-                                                        <td className="border border-gray-300 p-2"><strong>{cantidad}</strong></td>
-                                                        <td className="border border-gray-300 p-2">{producto}</td>
+                                                        <td className="border text-xl border-gray-300 p-2"><strong>{cantidad}</strong></td>
+                                                        <td className="border text-xl border-gray-300 p-2">{producto}</td>
                                                         <td className="border border-gray-300 p-2 text-center">
                                                             <input
                                                             type="button"
@@ -75,18 +98,58 @@ const ModalResumen = ({modalResumenAbierto,setModalResumenAbierto,productosSelec
                                     </div>
                                 </div>
                             ) : (
-                                <div className="h-full">
-                                    <button
-                                    onClick={() => setModalTodoTiket(true)}
-                                    className="bg-red-500 rounded-md p-2"
-                                    >
-                                        imprimir todo
-                                    </button>
-                                    <button
-                                    className="bg-green-500 rounded-md p-2"
-                                    >
-                                        acomodar viaje
-                                    </button>
+                                <div className="h-full p-2">
+                                    <div className="flex justify-between mb-24" >
+                                        <button
+                                        onClick={() => setModalTodoTiket(true)}
+                                        className="bg-red-500 rounded-md p-3 hover:bg-red-600"
+                                        >
+                                            imprimir todo
+                                        </button>
+                                        <button
+                                        className="bg-green-500 rounded-md p-3 hover:bg-green-600"
+                                        >
+                                            acomodar viaje
+                                        </button>
+                                    </div>
+                                    <div className="flex justify-center mb-12">
+                                        <button
+                                        onClick={verPin}
+                                        className="bg-blue-500 rounded-md p-3 hover:bg-blue-600"
+                                        >
+                                            ver
+                                        </button>
+                                        <input
+                                        value={pinNumber}
+                                        onChange={(e) => setPinNumber(e.target.value)}
+                                        className="border border-gray-300 ml-3 w-32"
+                                        type="number" name="" id=""
+                                        maxlength="4"
+                                        placeholder="PIN"
+                                        />
+                                    </div>
+                                    {pinCorrecto ? (
+                                        <>
+                                            <div className="text-center">
+                                            <h1 className="text-2xl font-bold">
+                                                Total
+                                            </h1>
+                                            <p className="text-5xl font-bold">{resumen.totalPedidos}</p>
+                                        </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="flex justify-center">
+                                                    <div className={`transition-all duration-1000 ease-in-out flex border-8 border-gray-600 items-center justify-center ${
+                                                        pinIncorrecto ? " border-red-600" : ""
+                                                    } w-24 h-24 text-gray-600`}>
+                                                    <LockClosedIcon className={`transition-all duration-1000 ease-in-out flex flex-col items-center justify-center ${
+                                                        pinIncorrecto ? "h-24 w-24 text-red-600" : ""
+                                                    } w-16 h-16 text-gray-600`} />
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
