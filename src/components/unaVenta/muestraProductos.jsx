@@ -213,7 +213,7 @@ const MuestraProducto = ({ productosSeleccionados,total,setClienteSeleccionado,s
             </table>
 
             <div className="flex justify-between space-x-3 mt-4">
-                <h3 className="text-lg font-semibold mt-4">Total: ${total}</h3>
+                <h3 className="text-3xl font-semibold mt-4">Total: ${total}</h3>
                 <div>
                     <button
                     onClick={handleGuardarRegistro}

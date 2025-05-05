@@ -8,7 +8,7 @@ const TicketCodigoBarras = ({ valorCode,setModalCode }) => {
 
     return (
         <div className="flex flex-col items-center justify-center">
-            <div>
+            <div className="text-center">
                 <h2 className="text-xl">{valorCode.producto}</h2>
                 <h2>
                     <Barcode value={valorCode.codigo} format="CODE128"/>
