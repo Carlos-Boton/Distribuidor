@@ -76,7 +76,7 @@ const ModalOtro = ({modalOtro,setModalOtro,setRegistroEditando,registroEditando,
         <>
             {modalOtro && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white w-[90%] h-[30%] rounded-lg overflow-hidden flex flex-col">
+                    <div className="bg-white w-[90%] h-[40%] rounded-lg overflow-hidden flex flex-col">
                         <div className="bg-gray-600 flex justify-between mb-4">
                             <button className={`p-2 ${seccionModal === "opcion" ? "font-bold bg-white" : "bg-blue-600 text-white"}`} onClick={() => setSeccionModal("opcion")}>
                                 <Cog6ToothIcon className="h-8 w-8" />
