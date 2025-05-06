@@ -50,17 +50,17 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
                     <tbody>
                         {tiketImpreso?.productos?.map((p, index) => (
                             <>
-                                <tr key={index}>
-                                    <td className="text-xl">{p.cantidad}</td>
-                                    <td className="text-xl">{p.producto}</td>
-                                    <td className="text-xl text-right">${(p.cantidad * p.precio)}</td>
+                                <tr key={index} className="p-0 m-0">
+                                    <td className="text-xl p-0">{p.cantidad}</td>
+                                    <td className="text-xl p-0">{p.producto}</td>
+                                    <td className="text-xl text-right p-0">${(p.cantidad * p.precio)}</td>
                                 </tr>
-                                <tr>
+                                <tr className="p-0 m-0">
                                     <td
                                     colSpan="4"
-                                    className="text-center"
+                                    className="text-center p-0 text-xs"
                                     >
-                                        ----------------------------------------------------
+                                        ---------------------------------------------------------------------------
                                     </td>
                                 </tr>
                             </>
@@ -83,7 +83,7 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
                                     <th className="text-left">Cant.</th>
                                     <th className="text-left">Producto</th>
                                     </tr>
-                                </thead>
+                                </thead>-
                                 <tbody>
                                     {tiketImpreso?.mermas?.map((m, index) => (
                                         <tr key={index}>
@@ -102,13 +102,13 @@ const Ticket = ({ tiketImpreso,setModalTiket }) => {
                 )}
 
                 <div
-                className="flex justify-between"
+                className="text-right"
                 >
                     <div>
-                        <p>N° de Artículos: <strong>{tiketImpreso?.productos?.reduce((acc, p) => acc + p.cantidad, 0) || 0} </strong> </p>
+                        <p className="text-3xl" >Total: <strong>${tiketImpreso?.total || "0.00"}</strong></p>
                     </div>
                     <div>
-                        <p className="text-3xl" >Total: <strong>${tiketImpreso?.total || "0.00"}</strong></p>
+                        <p>N° de Artículos: <strong>{tiketImpreso?.productos?.reduce((acc, p) => acc + p.cantidad, 0) || 0} </strong> </p>
                     </div>
                 </div>
 
