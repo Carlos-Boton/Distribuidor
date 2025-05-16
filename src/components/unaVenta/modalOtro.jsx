@@ -72,8 +72,8 @@ const ModalOtro = ({ modalOtroAbierto, setModalOtroAbierto, setClienteSelecciona
     return(
         <>
             {modalOtroAbierto && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white w-[90%] h-[40%] rounded-lg overflow-hidden flex flex-col">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start pt-48 justify-center">
+                    <div className="bg-white w-[90%] max-h-[40%] rounded-lg overflow-hidden flex flex-col">
                         <div className="bg-gray-600 flex justify-between mb-4">
                             <button className={`p-2 w-full ${seccionModal === "producto" ? "font-bold bg-white" : "text-white"}`} onClick={() => setSeccionModal("producto")}>
                                 Producto
