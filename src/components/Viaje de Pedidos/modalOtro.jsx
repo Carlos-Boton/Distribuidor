@@ -75,8 +75,8 @@ const ModalOtro = ({modalOtro,setModalOtro,setRegistroEditando,registroEditando,
     return(
         <>
             {modalOtro && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white w-[90%] h-[40%] rounded-lg overflow-hidden flex flex-col">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-48">
+                    <div className="bg-white w-[90%] max-h-[40vh] rounded-lg overflow-hidden flex flex-col">
                         <div className="bg-gray-600 flex justify-between mb-4">
                             <button className={`p-2 ${seccionModal === "opcion" ? "font-bold bg-white" : "bg-blue-600 text-white"}`} onClick={() => setSeccionModal("opcion")}>
                                 <Cog6ToothIcon className="h-8 w-8" />
@@ -97,6 +97,8 @@ const ModalOtro = ({modalOtro,setModalOtro,setRegistroEditando,registroEditando,
                         <div className="p-4">
                             { seccionModal === "opcion" ? (
                                 <>
+                                    <label>Eliminar el pedido</label>
+                                    <br />
                                     <button
                                     onClick={() => eliminarRegistro(registroEditando.id)}
                                     className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600">

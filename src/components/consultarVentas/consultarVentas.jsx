@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { XMarkIcon  } from '@heroicons/react/24/outline'
 
 const ConsultarVentas = () =>{
     const [viajeFiltro, setViajeFiltro] = useState("0");
@@ -117,10 +118,21 @@ const ConsultarVentas = () =>{
             )}
 
             {modalPedido && (
-                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-4 rounded w-80">
-                        <h3 className="text-lg font-bold">Detalles del Pedido</h3>
-                        <div className="flex justify-between space-x-3 mb-2">
+                <div className="fixed inset-0 bg-black bg-opacity-50 pt-36 flex justify-center items-start">
+                    <div
+                        className="bg-white w-[90vh] max-h-[80vh] overflow-y-auto rounded-xl shadow-lg"
+                        dir="rtl"
+                    >
+                        <div dir="ltr" className="bg-gray-500 flex justify-between">
+                            <h3 className="text-xl text-white px-8 py-4 font-semibold">Detalles de Pedido</h3>
+                            <button onClick={() => setModalPedido(null)} className="bg-red-500 p-2 hover:bg-red-600">
+                                <XMarkIcon className="h-8 w-8 text-black cursor-pointer" />
+                            </button>
+                        </div>
+
+                        <div dir="ltr" className="p-4 overflow-y-auto max-h-[70vh]">
+                            
+                            <div className="flex justify-between space-x-3 mb-2">
                             <p><strong>Cliente: </strong>{modalPedido.cliente}</p>
                             <p><strong>Viaje: </strong>{modalPedido.viaje}</p>
                         </div>
@@ -164,12 +176,8 @@ const ConsultarVentas = () =>{
                                 </table>
                             </div>
                         )}
-                        <button
-                        onClick={() => setModalPedido(null)}
-                        className="mt-2 bg-red-500 text-white p-1 rounded"
-                        >
-                            Cerrar
-                        </button>
+
+                        </div>
                     </div>
                 </div>
             )}
