@@ -8,7 +8,7 @@ const BuscarProducto = ({ productos, modalProducto, setModalProducto, handleAgre
         (p) =>
         p.producto.toLowerCase().includes(busqueda.toLowerCase()) ||
         p.precio.toString().includes(busqueda)
-    );
+    ).sort((a, b) => a.producto.localeCompare(b.producto));
 
     return(
         <>
