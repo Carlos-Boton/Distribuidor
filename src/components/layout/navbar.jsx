@@ -31,12 +31,12 @@ const Navbar = () => {
 
             {/* Navbar */}
             <nav className="fixed top-0 left-0 w-full bg-gray-600 shadow-md z-40 print:hidden">
-                <div className="container mx-auto flex items-center justify-between">
+                <div className="mx-auto flex items-center justify-between">
                     {/* Nombre de la app */}
                     <div className="flex items-center">
                         <button
                         onClick={toggleSidebar} // Al hacer clic aquí, se alterna el sidebar
-                        className="bg-gray-700 p-2 text-white text-xl font-semibold"
+                        className="bg-zinc-600 p-2 text-white text-xl font-semibold"
                         >
                             <Bars3Icon className="h-12 w-12 text-white" />
                         </button>

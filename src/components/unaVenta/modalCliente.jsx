@@ -12,8 +12,8 @@ const ModalCliente = ({ setModalClientesAbierto,modalClientesAbierto,setClienteS
     const clienteFiltrados = clientes.filter(
         (c) =>
         c.cliente.toLowerCase().includes(busquedaCliente.toLowerCase())
-    );
-    
+    ).sort((a, b) => a.cliente.localeCompare(b.cliente));
+        
     return(
         <>              
             {/* MODAL CLIENTES */}

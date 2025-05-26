@@ -13,7 +13,7 @@ const UserMenu = () => {
         
         <div className="relative">
             {/* Nombre de usuario con imagen */}
-            <div className="bg-gray-700 flex items-center cursor-pointer p-3" onClick={toggleMenu}>
+            <div className="bg-zinc-600 flex items-center cursor-pointer p-3" onClick={toggleMenu}>
                 <img
                 src="https://www.w3schools.com/w3images/avatar2.png" // Reemplaza con la imagen del usuario
                 alt="Usuario"

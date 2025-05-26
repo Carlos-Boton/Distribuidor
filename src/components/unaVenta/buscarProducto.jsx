@@ -4,11 +4,14 @@ import { XMarkIcon  } from '@heroicons/react/24/outline'
 const BuscarProducto = ({ productos, modalAbierto, setModalAbierto, agregarProducto }) => {
     const [busqueda, setBusqueda] = useState("");
 
-    const productosFiltrados = productos.filter(
-        (p) =>
-        p.producto.toLowerCase().includes(busqueda.toLowerCase()) ||
-        p.precio.toString().includes(busqueda)
-    );
+    const productosFiltrados = productos
+  .filter(
+    (p) =>
+      p.producto.toLowerCase().includes(busqueda.toLowerCase()) ||
+      p.precio.toString().includes(busqueda)
+  )
+  .sort((a, b) => a.producto.localeCompare(b.producto));
+
 
     return(
         <>
