@@ -24,6 +24,7 @@ const Productos = () => {
     const [alertaAgregar, setAlertaAgregar] = useState(false);
     const [alertaActualizar, setAlertaActualizar] = useState(false);
     const [agregarContenido, setAgregarContenido] = useState(false);
+    const [imprimirTodas, setImprimirTodas] = useState(false)
 
     const regresar = () => {
         setCodigo("");
@@ -193,11 +194,18 @@ const Productos = () => {
           p.precio.toString().includes(busqueda)
     );
 
+    const toggleImprimirTodas = () => {
+        setImprimirTodas(!imprimirTodas);
+        setModalCode(!modalCode);
+    }
+
   return (
     <div>
         {modalCode ? (
             <>
-                <TicketCodigoBarras valorCode={valorCode} setModalCode={setModalCode} />
+                <TicketCodigoBarras valorCode={valorCode} setModalCode={setModalCode} productitos={productitos} imprimirTodas={imprimirTodas}
+                toggleImprimirTodas={toggleImprimirTodas}
+                />
             </>   
         ) : (
             <div className="p-4 pt-36">
@@ -253,6 +261,11 @@ const Productos = () => {
                             placeholder="Buscar producto"
                             className="p-2 border border-gray-300 rounded-md w-full mb-4"
                             />
+                            <button
+                            onClick={toggleImprimirTodas}
+                            className="bg-red-500 text-white p-2 rounded-md mb-4" > 
+                                Todas
+                            </button>
                         </div>
                         <h3 className="mt-4 font-bold">Lista de Productos</h3>
                         <table className="w-full border-collapse border border-gray-300 my-4">

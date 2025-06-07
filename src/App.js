@@ -28,7 +28,7 @@ function AppContent() {
         <Routes>
             <Route 
                 path="/" 
-                element={user ? <UnaVenta /> : <Navigate to="/login" />} 
+                element={user ? <UnaVenta /> : <Navigate to="/login" />}
             />
             <Route 
                 path="/Viaje_pedidos" 
