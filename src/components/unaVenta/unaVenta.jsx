@@ -14,16 +14,12 @@ import ModalCliente from "./modalCliente";
 import Mermas from "./mermas";
 import Ticket from "../ticket/Ticket";
 
-const UnaVenta = () =>{
-    const [viaje, setViaje] = useState("0");
-    const [total, setTotal] = useState(0);
+const UnaVenta = ({viaje,setViaje,productosSeleccionados,setProductosSeleccionados,mermas,setMermas,clienteSeleccionado,setClienteSeleccionado,total,setTotal}) =>{
+    
     const [tiketImpreso, setTiketImpreso] = useState();
-    const [productosSeleccionados, setProductosSeleccionados] = useState([]);
     const [productos, setProductos] = useState([]);
     const [clientes, setClientes] = useState([]);
-    const [mermas, setMermas] = useState([]);
     const [direccionSeleccionado, setDireccionSeleccionado] = useState(null)
-    const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
     const [modalOtroAbierto, setModalOtroAbierto] = useState(false);
     const [modalAbierto, setModalAbierto] = useState(false);
     const [modalTiket, setModalTiket] = useState(false);

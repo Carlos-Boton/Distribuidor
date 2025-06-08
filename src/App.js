@@ -9,6 +9,7 @@ import Clientes from "./components/clientes/clientes";
 import Productos from "./components/productos/productos";
 import Registro from "./components/registro/sesion";
 import Eventos from "./components/eventos/evento";
+import { useState } from 'react';
 
 function App() { // Verifica si estás obteniendo el usuario correctamente
 
@@ -20,6 +21,11 @@ function App() { // Verifica si estás obteniendo el usuario correctamente
 }
 
 function AppContent() {
+  const [viaje, setViaje] = useState("0");
+  const [mermas, setMermas] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [productosSeleccionados, setProductosSeleccionados] = useState([]);
   const { user } = useAuth();  // Accede al estado del usuario desde el contexto
 
   return (
@@ -28,7 +34,9 @@ function AppContent() {
         <Routes>
             <Route 
                 path="/" 
-                element={user ? <UnaVenta /> : <Navigate to="/login" />}
+                element={user ? <UnaVenta viaje={viaje} setViaje={setViaje} productosSeleccionados={productosSeleccionados}
+                setProductosSeleccionados={setProductosSeleccionados} mermas={mermas} setMermas={setMermas} clienteSeleccionado={clienteSeleccionado} setClienteSeleccionado={setClienteSeleccionado} total={total} setTotal={setTotal}
+                /> : <Navigate to="/login" />}
             />
             <Route 
                 path="/Viaje_pedidos" 
